@@ -6,17 +6,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0f1117">
-  <title>Life OS — Dr. Cory Dugan</title>
+  <title>Life OS</title>
   <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTGlmZSBPUyIsInNob3J0X25hbWUiOiJMaWZlIE9TIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwZjExMTciLCJ0aGVtZV9jb2xvciI6IiMwZjExMTcifQ==">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{
-      --primary:#1a6b5a;--primary-dim:rgba(26,107,90,0.08);--primary-mid:#248f78;
-      --accent:#e8a838;--accent-dim:rgba(232,168,56,0.10);
       --bg:#0f1117;--bg-card:#161921;--bg-hover:#1c1f2a;
       --border:rgba(255,255,255,0.06);--border-subtle:rgba(255,255,255,0.03);
-      --text:#e8e8ea;--text-secondary:#a0a0aa;--text-muted:#5a5a66;
+      --text:#e8e8ea;--text-sec:#a0a0aa;--text-muted:#5a5a66;
       --green:#34d399;--green-dim:rgba(52,211,153,0.10);
       --red:#f87171;--red-dim:rgba(248,113,113,0.10);
       --purple:#a78bfa;--purple-dim:rgba(167,139,250,0.10);
@@ -26,351 +24,1536 @@
       --rose:#fb7185;--rose-dim:rgba(251,113,133,0.10);
       --cyan:#22d3ee;--cyan-dim:rgba(34,211,238,0.10);
       --orange:#fb923c;--orange-dim:rgba(251,146,60,0.10);
-      --radius:12px;--radius-sm:8px;
-      --font-heading:'Source Serif 4',serif;--font-body:'DM Sans',sans-serif;
+      --teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.10);
+      --r:12px;--rs:8px;
+      --fh:'Source Serif 4',serif;--fb:'DM Sans',sans-serif;
     }
-    body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
-    .top-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;padding-top:calc(env(safe-area-inset-top,12px) + 8px);border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:20}
-    .top-header h1{font-family:var(--font-heading);font-size:1.1rem;font-weight:600}
-    .top-header .date{font-size:0.60rem;color:var(--text-muted);margin-top:1px}
-    .crisis-btn{display:flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid var(--red-dim);background:var(--red-dim);color:var(--red);font-family:var(--font-body);font-size:0.62rem;font-weight:600;border-radius:var(--radius-sm);cursor:pointer}
-    .main-content{padding:12px 16px;padding-bottom:80px;max-width:800px;margin:0 auto}
-    .bottom-tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0c0e14;border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,8px);z-index:20}
-    .bottom-tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:none;background:transparent;color:var(--text-muted);font-family:var(--font-body);font-size:0.50rem;font-weight:500;cursor:pointer;transition:color 0.12s}
-    .bottom-tabs button.active{color:var(--primary)}
-    .bottom-tabs button .tab-icon{font-size:1.1rem;line-height:1}
-    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;transition:all 0.15s}
-    .card.collapsed{cursor:pointer;padding:10px 16px}
-    .card.collapsed:hover{background:var(--bg-hover)}
-    .card-title{font-family:var(--font-heading);font-size:0.84rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .stats-strip{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-    .stat-card{flex:1 1 0;min-width:70px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center}
-    .stat-label{font-size:0.50rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
-    .stat-value{font-size:0.88rem;font-weight:700}
-    .sparkline-container{display:flex;align-items:center;justify-content:center;gap:4px}
-    input[type="number"],input[type="text"],textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:0.72rem;padding:8px 10px;width:100%;outline:none;transition:border-color 0.15s}
-    input:focus,textarea:focus{border-color:var(--primary)}
+    body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    .top-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;padding-top:calc(env(safe-area-inset-top,10px) + 6px);border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:20}
+    .top-bar h1{font-family:var(--fh);font-size:1.05rem;font-weight:600}
+    .top-bar .sub{font-size:0.54rem;color:var(--text-muted);margin-top:1px}
+    .top-actions{display:flex;gap:6px;align-items:center}
+    .main{padding:12px 16px;padding-bottom:85px;max-width:520px;margin:0 auto}
+    /* Bottom nav */
+    .nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0c0e14;border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,6px);z-index:20}
+    .nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:none;background:transparent;color:var(--text-muted);font-family:var(--fb);font-size:0.46rem;font-weight:500;cursor:pointer;transition:color 0.12s}
+    .nav button.on{color:var(--teal)}
+    .nav .ico{font-size:1.05rem;line-height:1}
+    /* Cards */
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+    .card-t{font-family:var(--fh);font-size:0.82rem;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    /* Buttons */
+    .btn{background:var(--teal);color:#0f1117;border:none;border-radius:var(--rs);padding:10px 20px;font-family:var(--fb);font-size:0.70rem;font-weight:700;cursor:pointer;width:100%;transition:opacity 0.12s}
+    .btn:hover{opacity:0.85}
+    .btn:active{transform:scale(0.98)}
+    .btn-s{background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--rs);padding:5px 12px;font-family:var(--fb);font-size:0.58rem;font-weight:500;cursor:pointer}
+    .btn-s:hover{color:var(--text-sec);border-color:var(--text-muted)}
+    .btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
+    /* Pills */
+    .pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:16px;font-size:0.58rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.12s;user-select:none}
+    .pill:hover{border-color:var(--teal);color:var(--text-sec)}
+    .pill.on{background:rgba(45,212,191,0.10);border-color:var(--teal);color:var(--teal)}
+    /* State pills (bigger, for regulate) */
+    .state-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px;border-radius:var(--r);border:2px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all 0.15s;flex:1;min-width:0;text-align:center}
+    .state-btn .sico{font-size:1.3rem}
+    .state-btn .slbl{font-size:0.52rem;font-weight:600;color:var(--text-muted);line-height:1.2}
+    .state-btn.on{border-color:currentColor}
+    /* Inputs */
+    input[type="text"],input[type="number"],textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:var(--fb);font-size:0.70rem;padding:8px 12px;width:100%;outline:none;transition:border-color 0.15s}
+    input:focus,textarea:focus{border-color:var(--teal)}
     input::placeholder,textarea::placeholder{color:var(--text-muted)}
     textarea{resize:vertical;line-height:1.6}
+    /* Slider */
     input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;outline:none}
-    input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--primary);cursor:pointer}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .check-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;user-select:none}
-    .check-item:hover{background:rgba(255,255,255,0.03)}
-    .check-item.checked{background:var(--primary-dim);border-color:rgba(26,107,90,0.2)}
-    .check-box{width:16px;height:16px;border:2px solid var(--text-muted);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;flex-shrink:0;transition:all 0.15s}
-    .check-item.checked .check-box{border-color:var(--primary);background:var(--primary);color:#fff}
-    .check-text{font-size:0.66rem;color:var(--text-secondary)}
-    .check-item.checked .check-text{color:var(--primary-mid)}
-    .pill{display:inline-block;padding:4px 10px;border-radius:14px;font-size:0.58rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.12s}
-    .pill:hover{border-color:var(--primary);color:var(--text-secondary)}
-    .pill.active{background:var(--primary-dim);border-color:var(--primary);color:var(--primary)}
-    .btn-primary{background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:10px 20px;font-family:var(--font-body);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.15s;width:100%}
-    .btn-primary:hover{background:var(--primary-mid)}
-    .btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 12px;font-family:var(--font-body);font-size:0.62rem;font-weight:500;cursor:pointer}
-    .btn-ghost:hover{color:var(--text-secondary);border-color:var(--text-muted)}
-    .section-label{font-size:0.54rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin:14px 0 6px}
-    .task-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-subtle)}
-    .task-item:last-child{border-bottom:none}
-    .task-check{width:16px;height:16px;border:2px solid var(--text-muted);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;flex-shrink:0;cursor:pointer;margin-top:1px;transition:all 0.15s}
-    .task-check.done{border-color:var(--primary);background:var(--primary);color:#fff}
-    .task-content{flex:1;min-width:0}
-    .task-title{font-size:0.70rem;font-weight:600;color:var(--text-secondary);line-height:1.3}
-    .task-title.done{text-decoration:line-through;color:var(--text-muted)}
-    .task-meta{font-size:0.54rem;color:var(--text-muted);margin-top:2px}
-    .task-delete{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.56rem;opacity:0.4;padding:2px 4px;flex-shrink:0}
-    .task-delete:hover{opacity:1;color:var(--red)}
-    .tab-bar{display:flex;gap:4px;margin-bottom:8px}
-    .tab-btn{flex:1;padding:6px 8px;border-radius:var(--radius-sm);font-size:0.58rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;text-align:center;transition:all 0.12s}
-    .tab-btn.active{background:var(--primary-dim);border-color:var(--primary);color:var(--primary)}
-    .add-task-row{display:flex;gap:6px;margin-top:8px}
-    .add-task-row input{font-size:0.66rem;padding:6px 10px}
-    .add-task-btn{background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:6px 12px;font-size:0.66rem;font-weight:700;cursor:pointer;white-space:nowrap}
-    .waiting-badge{font-size:0.50rem;padding:2px 6px;border-radius:10px;background:var(--accent-dim);color:var(--accent);font-weight:600;white-space:nowrap}
-    .heatmap-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-    .heatmap-cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.52rem;font-weight:700;max-width:40px;margin:0 auto;width:100%}
-    .heatmap-label{font-size:0.46rem;color:var(--text-muted);text-align:center;margin-bottom:2px}
-    .summary-strip{display:flex;justify-content:space-between;align-items:center}
-    .summary-done{font-size:0.68rem;font-weight:600}
-    .summary-details{font-size:0.56rem;color:var(--text-muted);display:flex;gap:6px;flex-wrap:wrap}
-    .pv-rung{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:4px;cursor:pointer;transition:all 0.12s;border:1px solid transparent}
-    .pv-rung:hover{border-color:rgba(255,255,255,0.04)}
-    .pv-rung.selected{border-color:currentColor}
-    .pv-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-    .pv-label{font-size:0.72rem;font-weight:600}
-    .pv-desc{font-size:0.56rem;color:var(--text-muted);margin-top:1px}
-    .progress-dots{display:flex;gap:4px;margin-bottom:14px}
-    .progress-dots div{flex:1;height:3px;border-radius:2px;cursor:pointer;transition:background 0.2s}
-    .ns-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:0.52rem;font-weight:600}
-    .crisis-overlay{position:fixed;inset:0;background:rgba(15,17,23,0.98);z-index:100;padding:24px;overflow-y:auto;padding-top:calc(env(safe-area-inset-top,24px) + 12px)}
-    .crisis-section{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;cursor:pointer}
-    .crisis-section-title{padding:12px 16px;font-size:0.76rem;font-weight:700;display:flex;align-items:center;gap:8px}
-    .fade-in{animation:fadeIn 0.2s ease-out}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--teal);cursor:pointer}
+    /* Grid */
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+    /* Section label */
+    .slbl{font-size:0.50rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin:14px 0 6px}
+    /* Progress bar */
+    .pbar{height:4px;border-radius:2px;background:rgba(255,255,255,0.04);overflow:hidden}
+    .pbar .fill{height:100%;border-radius:2px;transition:width 0.3s}
+    /* Progress dots */
+    .pdots{display:flex;gap:4px;margin-bottom:12px}
+    .pdots div{flex:1;height:3px;border-radius:2px;cursor:pointer;transition:background 0.15s}
+    /* Animations */
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .fi{animation:fadeIn 0.2s ease-out}
     @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
     .pop{animation:pop 0.2s ease-out}
-    @keyframes checkPulse{0%{box-shadow:0 0 0 0 rgba(26,107,90,0.4)}70%{box-shadow:0 0 0 8px rgba(26,107,90,0)}100%{box-shadow:0 0 0 0 rgba(26,107,90,0)}}
-    .check-pulse{animation:checkPulse 0.4s ease-out}
-    @media(max-width:600px){.grid-3{grid-template-columns:1fr 1fr}}
-    .wheel-touch-area{cursor:pointer}
-    .assign-btn{background:none;border:1px dashed var(--border);border-radius:var(--radius-sm);padding:3px 8px;font-size:0.52rem;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);transition:all 0.12s}
-    .assign-btn:hover{border-color:var(--accent);color:var(--accent)}
-    .assign-btn.assigned{border-style:solid;border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-    .modal-overlay{position:fixed;inset:0;background:rgba(15,17,23,0.92);z-index:50;display:flex;align-items:flex-end;justify-content:center}
-    .modal-sheet{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:800px;max-height:80vh;overflow-y:auto;padding:20px 16px;animation:slideUp 0.2s ease-out}
-    @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-    .insight-card{padding:10px 14px;background:rgba(232,168,56,0.06);border:1px solid rgba(232,168,56,0.15);border-radius:var(--radius-sm);margin-bottom:6px}
-    .insight-icon{font-size:0.8rem;margin-right:6px}
-    .insight-text{font-size:0.64rem;color:var(--accent);line-height:1.4}
-    .quick-log-bar{display:flex;gap:8px;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;align-items:center}
-    .quick-mood{display:flex;gap:4px}
-    .mood-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:transparent;font-size:1rem;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;justify-content:center}
-    .mood-btn.selected{border-color:var(--primary);background:var(--primary-dim);transform:scale(1.15)}
-    .mood-btn:hover{border-color:var(--primary)}
-    .step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-    .step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.56rem;font-weight:700;color:var(--text-muted);transition:all 0.2s;cursor:pointer}
-    .step-dot.done{border-color:var(--primary);background:var(--primary);color:#fff}
-    .step-dot.current{border-color:var(--primary);color:var(--primary)}
-    .step-line{flex:1;height:2px;background:var(--border);transition:background 0.2s}
-    .step-line.done{background:var(--primary)}
-    .milestone-card{padding:10px 12px;background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:all 0.15s}
-    .milestone-card:hover{background:rgba(255,255,255,0.03)}
+    /* Mood faces */
+    .face-row{display:flex;gap:6px;justify-content:center}
+    .face-btn{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transition:all 0.12s}
+    .face-btn.on{border-color:var(--teal);background:var(--teal-dim);transform:scale(1.1)}
+    /* Check items */
+    .chk{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:all 0.12s;user-select:none}
+    .chk:hover{background:rgba(255,255,255,0.03)}
+    .chk.on{background:var(--teal-dim);border-color:rgba(45,212,191,0.2)}
+    .chk-box{width:16px;height:16px;border:2px solid var(--text-muted);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;flex-shrink:0;transition:all 0.15s}
+    .chk.on .chk-box{border-color:var(--teal);background:var(--teal);color:#0f1117}
+    .chk-txt{font-size:0.64rem;color:var(--text-sec)}
+    .chk.on .chk-txt{color:var(--teal)}
+    /* Insight card */
+    .ins{display:flex;gap:8px;padding:8px 12px;background:var(--amber-dim);border:1px solid rgba(251,191,36,0.15);border-radius:var(--rs);margin-bottom:6px;align-items:flex-start}
+    .ins .iico{font-size:0.8rem;flex-shrink:0;margin-top:1px}
+    .ins .itxt{font-size:0.60rem;color:var(--amber);line-height:1.4;flex:1}
+    /* Task items */
+    .tsk{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-subtle)}
+    .tsk:last-child{border-bottom:none}
+    .tsk-chk{width:18px;height:18px;border:2px solid var(--text-muted);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;flex-shrink:0;cursor:pointer;margin-top:1px;transition:all 0.15s}
+    .tsk-chk.done{border-color:var(--teal);background:var(--teal);color:#0f1117}
+    .tsk-title{font-size:0.66rem;font-weight:600;color:var(--text-sec);line-height:1.3}
+    .tsk-title.done{text-decoration:line-through;color:var(--text-muted)}
+    .tsk-meta{font-size:0.50rem;color:var(--text-muted);margin-top:2px}
+    /* Energy badges */
+    .ebadge{font-size:0.46rem;padding:2px 7px;border-radius:10px;font-weight:700}
+    .ebadge.low{background:var(--green-dim);color:var(--green)}
+    .ebadge.med{background:var(--amber-dim);color:var(--amber)}
+    .ebadge.high{background:var(--red-dim);color:var(--red)}
+    /* Wheel SVG */
+    .wheel-wrap{display:flex;justify-content:center;margin:8px 0 12px}
+    /* Timeline */
+    .timeline{position:relative;padding-left:24px}
+    .timeline::before{content:'';position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--border)}
+    .tl-dot{width:10px;height:10px;border-radius:50%;position:absolute;left:7px;z-index:1;border:2px solid var(--bg)}
+    .tl-item{position:relative;margin-bottom:8px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs)}
+    /* Modal */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+    .modal-sheet{background:var(--bg-card);border-radius:16px 16px 0 0;padding:20px 16px;padding-bottom:calc(env(safe-area-inset-bottom,12px) + 16px);width:100%;max-width:520px;max-height:85vh;overflow-y:auto}
+    /* Breathing circle */
+    @keyframes breatheIn{from{transform:scale(0.6);opacity:0.5}to{transform:scale(1);opacity:1}}
+    @keyframes breatheOut{from{transform:scale(1);opacity:1}to{transform:scale(0.6);opacity:0.5}}
+    .breathe-circle{width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--teal-dim),transparent);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:20px auto;font-family:var(--fh);font-size:0.9rem;font-weight:600;color:var(--teal)}
+    /* Collapsed card */
+    .card-col{cursor:pointer;padding:10px 16px}
+    .card-col:hover{background:var(--bg-hover)}
+    .summary{display:flex;justify-content:space-between;align-items:center}
+    .s-done{font-size:0.66rem;font-weight:600}
+    .s-tags{display:flex;gap:6px;flex-wrap:wrap;font-size:0.52rem;color:var(--text-muted)}
+    /* Sparkline */
+    .spark{display:block}
+    /* Heatmap */
+    .hm-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+    .hm-cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.50rem;font-weight:700;max-width:38px;margin:0 auto;width:100%}
+    .hm-lbl{font-size:0.44rem;color:var(--text-muted);text-align:center;margin-bottom:2px}
+    /* Values card */
+    .vcard{padding:14px;border-radius:var(--r);border:2px solid var(--border);background:var(--bg-card);cursor:pointer;transition:all 0.15s;text-align:center}
+    .vcard:hover{border-color:var(--teal)}
+    .vcard.on{border-color:var(--teal);background:var(--teal-dim)}
+    .vcard .vlbl{font-size:0.68rem;font-weight:700}
+    .vcard .vdesc{font-size:0.50rem;color:var(--text-muted);margin-top:3px}
+    /* Swipe hint */
+    .swipe-hint{font-size:0.50rem;color:var(--text-muted);text-align:center;padding:4px 0}
+    /* Mode badge */
+    .mode-badge{font-size:0.48rem;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px}
   </style>
 </head>
 <body>
 <div id="root"></div>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script>
-'use strict';
-var h=React.createElement,useState=React.useState,useEffect=React.useEffect,useMemo=React.useMemo,useRef=React.useRef,useCallback=React.useCallback;
+var h=React.createElement,useState=React.useState,useEffect=React.useEffect,useMemo=React.useMemo,useCallback=React.useCallback,useRef=React.useRef;
+
+/* ===== UNIFIED PILLAR MODEL ===== */
+var PILLARS=[
+  {id:'body',label:'Body & Energy',icon:'\uD83D\uDD25',color:'var(--orange)',dim:'var(--orange-dim)',order:1},
+  {id:'emotions',label:'Emotions & NS',icon:'\uD83C\uDF0A',color:'var(--blue)',dim:'var(--blue-dim)',order:2},
+  {id:'relationships',label:'Relationships',icon:'\u2764\uFE0F',color:'var(--pink)',dim:'var(--pink-dim)',order:3},
+  {id:'work',label:'Work & Roles',icon:'\uD83D\uDCBC',color:'var(--teal)',dim:'var(--teal-dim)',order:4},
+  {id:'time',label:'Time & Attention',icon:'\u23F3',color:'var(--purple)',dim:'var(--purple-dim)',order:5},
+  {id:'home',label:'Home & Environment',icon:'\uD83C\uDFE1',color:'var(--rose)',dim:'var(--rose-dim)',order:6},
+  {id:'meaning',label:'Meaning & Values',icon:'\u2728',color:'var(--amber)',dim:'var(--amber-dim)',order:7},
+  {id:'admin',label:'Practical Admin',icon:'\uD83D\uDCCB',color:'var(--cyan)',dim:'var(--cyan-dim)',order:8}
+];
+function pillar(id){return PILLARS.find(function(p){return p.id===id})||PILLARS[0]}
+
+/* ===== NERVOUS SYSTEM STATES ===== */
+var NS_STATES=[
+  {id:'calm',label:'Calm',icon:'\u2600\uFE0F',color:'var(--green)',dim:'var(--green-dim)',desc:'Safe, grounded, present'},
+  {id:'activated',label:'Activated',icon:'\u26A1',color:'var(--amber)',dim:'var(--amber-dim)',desc:'Anxious, restless, racing'},
+  {id:'overwhelmed',label:'Overwhelmed',icon:'\uD83C\uDF0A',color:'var(--orange)',dim:'var(--orange-dim)',desc:'Too much, can\'t think'},
+  {id:'shutdown',label:'Shut Down',icon:'\u2744\uFE0F',color:'var(--blue)',dim:'var(--blue-dim)',desc:'Numb, foggy, frozen'},
+  {id:'unsafe',label:'Unsafe',icon:'\uD83D\uDEA8',color:'var(--red)',dim:'var(--red-dim)',desc:'Need support now'}
+];
+function nsState(id){return NS_STATES.find(function(s){return s.id===id})||NS_STATES[0]}
+
+/* ===== MOOD FACES ===== */
+var MOODS=[{v:1,e:'\uD83D\uDE2B',l:'Awful'},{v:2,e:'\uD83D\uDE14',l:'Low'},{v:3,e:'\uD83D\uDE10',l:'Meh'},{v:4,e:'\uD83D\uDE0A',l:'Good'},{v:5,e:'\uD83E\uDD29',l:'Great'}];
+
+/* ===== ENERGY LEVELS ===== */
+var ENERGY_LEVELS=[
+  {id:'survival',label:'Survival',icon:'\uD83D\uDECF\uFE0F',color:'var(--red)',desc:'Bare minimum only'},
+  {id:'low',label:'Low',icon:'\uD83D\uDC22',color:'var(--orange)',desc:'Gentle tasks only'},
+  {id:'medium',label:'Medium',icon:'\u2615',color:'var(--amber)',desc:'Normal capacity'},
+  {id:'high',label:'High',icon:'\uD83D\uDD25',color:'var(--green)',desc:'Full steam'}
+];
+
+/* ===== REGULATION ACTIONS (state-specific) ===== */
+var REG_ACTIONS={
+  calm:[
+    {id:'grounding',label:'Grounding practice',dur:'3 min',icon:'\uD83C\uDF3F',type:'guided'},
+    {id:'plan',label:'Plan next 2 hours',dur:'2 min',icon:'\uD83D\uDCDD',type:'prompt'},
+    {id:'gratitude',label:'Name 3 good things',dur:'1 min',icon:'\uD83D\uDE4F',type:'prompt'}
+  ],
+  activated:[
+    {id:'paced-breathing',label:'Paced breathing (4-7-8)',dur:'3 min',icon:'\uD83D\uDCA8',type:'breathing'},
+    {id:'five-senses',label:'5-4-3-2-1 grounding',dur:'2 min',icon:'\u270B',type:'guided'},
+    {id:'cold-water',label:'Cold water on wrists',dur:'1 min',icon:'\uD83E\uDDCA',type:'action'},
+    {id:'body-scan',label:'Quick body scan',dur:'5 min',icon:'\uD83E\uDDD8',type:'guided'}
+  ],
+  overwhelmed:[
+    {id:'tip-skill',label:'TIPP: Temperature',dur:'1 min',icon:'\uD83E\uDDCA',type:'action'},
+    {id:'paced-breathing',label:'Box breathing',dur:'3 min',icon:'\uD83D\uDCA8',type:'breathing'},
+    {id:'safe-people',label:'Name 3 safe people',dur:'1 min',icon:'\uD83D\uDC65',type:'prompt'},
+    {id:'micro-move',label:'Stand up & stretch',dur:'1 min',icon:'\uD83E\uDDD8',type:'action'}
+  ],
+  shutdown:[
+    {id:'sensory',label:'Hold something warm/cold',dur:'1 min',icon:'\u2615',type:'action'},
+    {id:'micro-move',label:'Wiggle fingers & toes',dur:'30 sec',icon:'\uD83D\uDC4B',type:'action'},
+    {id:'music',label:'Put on a familiar song',dur:'3 min',icon:'\uD83C\uDFB5',type:'action'},
+    {id:'orient',label:'Look around: name 5 objects',dur:'1 min',icon:'\uD83D\uDC41\uFE0F',type:'guided'}
+  ],
+  unsafe:[]
+};
+
+/* ===== DBT SKILL MODULES ===== */
+var DBT_MODULES=[
+  {id:'distress',name:'Distress Tolerance',icon:'\uD83D\uDEE1\uFE0F',color:'var(--red)',
+   skills:[
+     {id:'tipp',name:'TIPP',steps:['Temperature: ice on face/cold shower for 30s','Intense exercise: 10 jumping jacks or run in place','Paced breathing: inhale 4, hold 4, exhale 6','Progressive muscle relaxation: tense & release each muscle group']},
+     {id:'stop',name:'STOP',steps:['Stop: freeze, don\'t react','Take a step back: breathe','Observe: what am I feeling? What\'s happening?','Proceed mindfully: what will help right now?']},
+     {id:'radical-accept',name:'Radical Acceptance',steps:['Notice you are fighting reality','Remind yourself: this is what is, right now','Turn your mind toward acceptance (not approval)','Practice half-smile and willing hands','Ask: what can I do from here?']}
+   ]},
+  {id:'emotion',name:'Emotion Regulation',icon:'\uD83C\uDFA8',color:'var(--amber)',
+   skills:[
+     {id:'check-facts',name:'Check the Facts',steps:['What event triggered this emotion?','What am I interpreting or assuming?','What are the actual facts?','Does my emotional intensity fit the facts?','If not, what emotion fits the facts better?']},
+     {id:'opposite-action',name:'Opposite Action',steps:['Name the emotion and its action urge','Is acting on this urge effective right now?','Identify the opposite action','Do the opposite ALL THE WAY','Repeat until the emotion shifts']},
+     {id:'abc-please',name:'ABC PLEASE',steps:['Accumulate positives: do one pleasant thing today','Build mastery: do something that gives you competence','Cope ahead: plan for a difficult situation this week','PL: treat PhysicaL illness','E: balanced Eating','A: avoid mood-Altering substances','S: balanced Sleep','E: get Exercise']}
+   ]},
+  {id:'interpersonal',name:'Interpersonal',icon:'\uD83E\uDD1D',color:'var(--pink)',
+   skills:[
+     {id:'dear-man',name:'DEAR MAN',steps:['Describe the situation (facts only)','Express how you feel about it','Assert what you want clearly','Reinforce: explain why this helps them too','Mindful: stay on topic, broken record if needed','Appear confident: posture, tone, eye contact','Negotiate: be willing to give to get']},
+     {id:'give',name:'GIVE',steps:['Gentle: no attacks, threats, or judging','Interested: listen, don\'t interrupt','Validate: acknowledge their feelings','Easy manner: use humor, be light']}
+   ]},
+  {id:'mindfulness',name:'Mindfulness',icon:'\uD83E\uDDD8',color:'var(--purple)',
+   skills:[
+     {id:'observe',name:'Observe & Describe',steps:['Sit comfortably for 60 seconds','Notice 3 things you can see','Notice 2 things you can hear','Notice 1 thing you can feel','Describe each without judgment: just the facts']},
+     {id:'one-mindful',name:'One-Mindfully',steps:['Choose one activity you are about to do','Commit to doing ONLY that thing','When your mind wanders, gently return','Notice the richness of single-focus attention','Aim for just 5 minutes of this']}
+   ]}
+];
+
+/* ===== VALUES CARDS (ACT/Brene Brown/VIA informed) ===== */
+var VALUES_CARDS=[
+  {id:'autonomy',label:'Autonomy',desc:'Freedom to make my own choices'},
+  {id:'connection',label:'Connection',desc:'Deep bonds with others'},
+  {id:'creativity',label:'Creativity',desc:'Making and expressing'},
+  {id:'courage',label:'Courage',desc:'Acting despite fear'},
+  {id:'curiosity',label:'Curiosity',desc:'Learning and exploring'},
+  {id:'fairness',label:'Fairness',desc:'Justice and equity'},
+  {id:'growth',label:'Growth',desc:'Becoming who I want to be'},
+  {id:'health',label:'Health',desc:'Physical and mental wellbeing'},
+  {id:'honesty',label:'Honesty',desc:'Truth and authenticity'},
+  {id:'humor',label:'Humor',desc:'Lightness and play'},
+  {id:'kindness',label:'Kindness',desc:'Compassion for self and others'},
+  {id:'knowledge',label:'Knowledge',desc:'Understanding deeply'},
+  {id:'purpose',label:'Purpose',desc:'Meaningful contribution'},
+  {id:'security',label:'Security',desc:'Safety and stability'},
+  {id:'service',label:'Service',desc:'Helping others thrive'},
+  {id:'stability',label:'Stability',desc:'Predictability and calm'}
+];
+
+/* ===== DISCOVER JOURNEYS ===== */
+var JOURNEYS=[
+  {id:'values',title:'What do I value right now?',icon:'\u2728',pillars:['meaning'],steps:5,type:'values'},
+  {id:'drainers',title:'What drains my energy?',icon:'\uD83D\uDD0B',pillars:['body','time'],steps:4,type:'drainers'},
+  {id:'future-me',title:'Where do I want to be?',icon:'\uD83D\uDD2E',pillars:['meaning','work'],steps:8,type:'future'},
+  {id:'enough',title:'What does "enough" look like?',icon:'\u2696\uFE0F',pillars:['admin','work'],steps:4,type:'enough'},
+  {id:'needs',title:'What do I need more of?',icon:'\uD83C\uDF31',pillars:['body','emotions'],steps:4,type:'needs'},
+  {id:'success',title:'Redefining success',icon:'\uD83C\uDFC6',pillars:['work','meaning'],steps:4,type:'success'}
+];
+
+/* ===== SAFETY PLAN DEFAULT ===== */
+var DEFAULT_SAFETY={
+  warnings:['Ruminating on past failures >30 min','Withdrawing from all contact','Dissociating or losing time','Romanticizing "peace" or giving things away'],
+  internalCoping:['Ice shower: full body cold exposure','4-7-8 breathing (4 inhale, 7 hold, 8 exhale)','Leave the house: any destination','Loud music + movement','Handwrite what you\'re feeling'],
+  people:[
+    {name:'Wiebke',role:'Partner',phone:''},
+    {name:'Ivan',role:'Close friend',phone:''},
+    {name:'Crisis Line (US)',role:'988 Suicide & Crisis',phone:'988'},
+    {name:'Emergency',role:'',phone:'911'}
+  ],
+  safePlace:'Outside, anywhere with movement',
+  reasons:['HolisticHer: women need this work','Family: Mum, Dad, Brianna','The research that matters','The person you are becoming'],
+  scripts:[
+    {label:'Need to talk',text:'Hey, I\'m not doing great right now and could really use someone to talk to. Are you free?'},
+    {label:'Not safe',text:'I need help. I\'m not feeling safe right now. Can you come over or call me?'},
+    {label:'Just reaching out',text:'Hey, just wanted to say hi. I\'m trying to stay connected today.'}
+  ]
+};
+
+/* ===== STORAGE ===== */
+var STORE_KEY='lifeOS_v4';var _mem={};
+var EMPTY={
+  pillars:PILLARS.map(function(p){return{id:p.id,active:true}}),
+  settings:{},
+  wheelSnapshots:[],
+  checkIns:[],
+  promptResponses:[],
+  regulationSessions:[],
+  tasks:[],
+  safetyPlan:DEFAULT_SAFETY,
+  discoveries:{},
+  valuesState:{selected:[],top:[],experiments:[]},
+  _v:4,_lastMod:0
+};
+function loadStore(){
+  try{
+    var raw;try{raw=window.localStorage.getItem(STORE_KEY)}catch(e){}
+    if(!raw)raw=_mem[STORE_KEY];
+    if(raw){var d=JSON.parse(raw);if(d._v===4)return d}
+    /* Migration from v1/v3 */
+    var old;try{old=window.localStorage.getItem('cory_life_os_v1')}catch(e){}
+    if(old){
+      var o=JSON.parse(old);
+      var s=JSON.parse(JSON.stringify(EMPTY));
+      /* Migrate check-ins */
+      if(o.checkIns)s.checkIns=o.checkIns.map(function(ci){return{id:ci.id,type:'regulate',createdAt:ci.date+'T'+(ci.time||'12:00'),mood:ci.mood,energy:ci.energy,nsState:ci.autonomicState==='ventral'?'calm':ci.autonomicState==='sympathetic'?'activated':ci.autonomicState==='dorsal'?'shutdown':'calm',emotion:ci.emotion||'',note:ci.note||'',tags:[]}});
+      /* Migrate tasks */
+      if(o.tasks)s.tasks=o.tasks.map(function(t){return{id:t.id,title:t.text,pillarIds:[],energyCost:'medium',status:t.done?'done':t.category==='waiting'?'waiting':'todo',nextAction:'',meta:t.meta||'',priority:t.priority||2,doneDate:t.doneDate||null}});
+      /* Migrate wheel snapshots */
+      if(o.pillarRatings&&o.pillarRatings.length){
+        s.wheelSnapshots=o.pillarRatings.map(function(pr){
+          var ratings={};if(pr.ratings)Object.keys(pr.ratings).forEach(function(k){
+            /* Map old pillar IDs to new */
+            var map={mind:'emotions',body:'body',career:'work',creative:'meaning',knowledge:'time',relationships:'relationships',finances:'admin',environment:'home'};
+            var nk=map[k]||k;ratings[nk]=pr.ratings[k];
+          });
+          return{id:pr.id||uid(),createdAt:pr.created||(pr.date+'T12:00'),ratings:ratings,notes:'',topIssue:''}
+        });
+      }
+      /* Migrate daily data */
+      if(o.days){
+        Object.keys(o.days).forEach(function(dk){
+          var d=o.days[dk];
+          if(d.morning_done){
+            s.checkIns.push({id:uid(),type:'morning',createdAt:dk+'T07:30',mood:d.mood||3,energy:d.energy||3,nsState:'calm',sleepQuality:d.sleep_quality==='Good'?4:d.sleep_quality==='OK'?3:2,sleepHrs:parseFloat(d.sleep_hrs)||0,weight:parseFloat(d.weight)||0,tags:[]});
+          }
+          if(d.evening_done){
+            s.checkIns.push({id:uid(),type:'evening',createdAt:dk+'T21:00',mood:d.mood||3,energy:d.energy||3,nsState:'calm',emotion:d.emotion||'',exercised:!!d.exercised,note:d.wins||'',tags:[]});
+          }
+        });
+      }
+      s._lastMod=Date.now();
+      return s;
+    }
+    return JSON.parse(JSON.stringify(EMPTY));
+  }catch(e){return JSON.parse(JSON.stringify(EMPTY))}
+}
+function saveStore(d){d._lastMod=Date.now();var s=JSON.stringify(d);try{window.localStorage.setItem(STORE_KEY,s)}catch(e){}_mem[STORE_KEY]=s}
+
+/* ===== UTILS ===== */
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function today(){return new Date().toISOString().slice(0,10)}
-function now(){return new Date().toISOString()}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function formatDate(d){return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}
-function dayLabel(d){return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}
-function timeLabel(iso){if(!iso)return'';return new Date(iso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}
-var DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-var STORE_KEY='cory_life_os_v1';var _mem={};
-var EMPTY_STORE={days:{},tasks:[],taskIdCounter:100,checkIns:[],pillarRatings:[],discoveries:{},milestones:[],settings:{},_lastModified:0};
-function loadLocal(){try{var r;try{r=window.localStorage.getItem(STORE_KEY)}catch(e){}if(!r)r=_mem[STORE_KEY];if(r)return JSON.parse(r);var merged=JSON.parse(JSON.stringify(EMPTY_STORE));try{var oldD=window.localStorage.getItem('cory_daily_routine_v2');if(oldD){var d=JSON.parse(oldD);if(d.days)merged.days=d.days;if(d.tasks&&d.tasks.length)merged.tasks=d.tasks;if(d.taskIdCounter)merged.taskIdCounter=d.taskIdCounter}var oldL=window.localStorage.getItem('cory_life_interface_v2');if(oldL){var l=JSON.parse(oldL);if(l.checkIns)merged.checkIns=l.checkIns;if(l.pillarRatings)merged.pillarRatings=l.pillarRatings;if(l.discoveries)merged.discoveries=l.discoveries}}catch(e){}return merged}catch(e){return JSON.parse(JSON.stringify(EMPTY_STORE))}}
-function saveLocal(d){d._lastModified=Date.now();var s=JSON.stringify(d);try{window.localStorage.setItem(STORE_KEY,s)}catch(e){}_mem[STORE_KEY]=s}
-function load(){return loadLocal()}
-function save(d){saveLocal(d)}
+function nowISO(){return new Date().toISOString()}
+function timeOfDay(){var h=new Date().getHours();return h<12?'morning':h<17?'afternoon':'evening'}
+function dayLabel(iso){if(!iso)return'';var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}
+function relDay(iso){var t=today();if(iso===t)return'Today';var y=new Date();y.setDate(y.getDate()-1);if(iso===y.toISOString().slice(0,10))return'Yesterday';return dayLabel(iso)}
+function timeLabel(iso){if(!iso)return'';try{return new Date(iso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}catch(e){return''}}
+function avg(arr){if(!arr.length)return 0;return Math.round(arr.reduce(function(a,b){return a+b},0)/arr.length*10)/10}
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v))}
 
-/* DATA */
-var DEFAULT_TASKS=[
-{id:'t1',text:'PhRMA Foundation Fellowship',meta:'Deadline Mar 27',category:'active',done:false,priority:1},
-{id:'t2',text:'SIB article trim to \u22641,650 words',meta:'May women\'s health issue',category:'active',done:false,priority:1},
-{id:'t3',text:'WIRF grant EOI to Vicki Main',meta:'Proposal drafted w/ Chris Reid & Ross Baker',category:'active',done:false,priority:1},
-{id:'t4',text:'Frontiers iron metabolism review',meta:'~8k words, ~60 citations',category:'active',done:false,priority:2},
-{id:'t5',text:'MHANES manuscript writing',meta:'Data uploaded Mar 14',category:'active',done:false,priority:2},
-{id:'t6',text:'SAGE Special Collection APCs',meta:'Negotiating with Stephanie Shroot',category:'active',done:false,priority:2},
-{id:'t7',text:'Student manuscript guidance',meta:'Heather, Darsiha, Fanija, Hayley',category:'active',done:false,priority:3},
-{id:'t8',text:'Stripe account setup',meta:'HolisticHer\u2122 payments',category:'active',done:false,priority:3},
-{id:'t9',text:'Australian business registration',meta:'Ref 2603-OU-4855',category:'active',done:false,priority:3},
-{id:'t10',text:'UWA conference outreach follow-ups',meta:'10+ orgs remaining',category:'active',done:false,priority:2},
-{id:'t11',text:'ARL Distinguished Postdoc Fellowship',meta:'Deadline Apr 24',category:'active',done:false,priority:2},
-{id:'t12',text:'Forrest Research Fellowship (WA)',meta:'Deadline Apr 30',category:'active',done:false,priority:2},
-{id:'t13',text:'NORC presentation prep',meta:'Practice Apr 10, Official Apr 13',category:'active',done:false,priority:2},
-{id:'t14',text:'SIB invoice confirmation',meta:'Sent to Eurico Mar 27',category:'waiting',done:false,priority:3},
-{id:'t15',text:'Ross Baker / PBI meeting',meta:'MyFlowCheck integration',category:'waiting',done:false,priority:2},
-{id:'t16',text:'Eva Perroni / CWSW call',meta:'Apr 7, 7:30pm CT',category:'waiting',done:false,priority:2},
-{id:'t17',text:'CHOP / Olivia Chesniak response',meta:'Individual meeting request',category:'waiting',done:false,priority:3},
-{id:'t18',text:'Bali Astagina cancellation deadline',meta:'Apr 7',category:'waiting',done:false,priority:1},
-{id:'t19',text:'Rent renewal + insurance form',meta:'Flagged Mar 11',category:'active',done:false,priority:3},
-{id:'t20',text:'Cancel Google Enterprise',meta:'Flagged Mar 22',category:'active',done:false,priority:3},
-{id:'t21',text:'Contact ABC Radio',meta:'Women\'s health media opportunity',category:'someday',done:false,priority:3},
-{id:'t22',text:'AIM-AHEAD course progress',meta:'Deep work sessions needed',category:'someday',done:false,priority:3}];
-var AUTONOMIC_STATES=[
-{id:'ventral',name:'Ventral Vagal',subtitle:'Safe & Social',icon:'\u2600\uFE0F',color:'var(--green)',dimColor:'var(--green-dim)',desc:'Connected, calm, grounded'},
-{id:'sympathetic',name:'Sympathetic',subtitle:'Fight / Flight',icon:'\u26A1',color:'var(--amber)',dimColor:'var(--amber-dim)',desc:'Anxious, racing, restless'},
-{id:'dorsal',name:'Dorsal Vagal',subtitle:'Shutdown',icon:'\u2744\uFE0F',color:'var(--blue)',dimColor:'var(--blue-dim)',desc:'Numb, disconnected, foggy'},
-{id:'blend_vs',name:'Ventral-Sympathetic',subtitle:'Play / Passion',icon:'\uD83D\uDD25',color:'var(--orange)',dimColor:'var(--orange-dim)',desc:'Energized but grounded, flow'},
-{id:'blend_sd',name:'Sympathetic-Dorsal',subtitle:'Freeze',icon:'\uD83E\uDDE9',color:'var(--red)',dimColor:'var(--red-dim)',desc:'Panic + shutdown, trapped'}];
-var EMOTION_WHEEL={joy:{color:'var(--green)',children:['Happy','Grateful','Optimistic','Playful','Content','Proud','Peaceful','Hopeful']},sadness:{color:'var(--blue)',children:['Lonely','Hurt','Disappointed','Hopeless','Empty','Nostalgic','Guilty','Ashamed']},anger:{color:'var(--red)',children:['Frustrated','Irritated','Resentful','Furious','Betrayed','Bitter']},fear:{color:'var(--amber)',children:['Anxious','Panicked','Insecure','Overwhelmed','Vulnerable','Hypervigilant','Helpless']},surprise:{color:'var(--purple)',children:['Shocked','Confused','Amazed','Awe']},disgust:{color:'var(--orange)',children:['Repulsed','Self-loathing','Judgmental']},flat:{color:'var(--text-muted)',children:['Numb','Empty','Apathetic','Detached','Bored','Dissociated']}};
-var SOMATIC_MARKERS={ventral:['Warm chest','Relaxed shoulders','Deep breath','Open posture','Soft jaw','Grounded feet'],sympathetic:['Racing heart','Tight chest','Clenched jaw','Shallow breath','Hot face','Restless legs','Sweaty palms'],dorsal:['Heavy limbs','Foggy head','Cold extremities','Hollow chest','Sunken posture','Slow movement'],blend_vs:['Warm energy','Tingling','Alert but calm','Light chest','Steady heartbeat'],blend_sd:['Frozen limbs','Racing mind + heavy body','Nausea','Tunnel vision','Dissociated']};
-var DBT_SKILLS=[{id:'distress',name:'Distress Tolerance',examples:['TIPP','Ice dive','Paced breathing','STOP skill','Radical acceptance','Self-soothe']},{id:'emotion',name:'Emotion Regulation',examples:['Check the facts','Opposite action','ABC PLEASE','Build mastery','Cope ahead']},{id:'interpersonal',name:'Interpersonal',examples:['DEAR MAN','GIVE','FAST','Boundaries']},{id:'mindfulness',name:'Mindfulness',examples:['Observe','Describe','Non-judgmental','One-mindful','Effective']}];
-var RSD_LEVELS=[{val:0,desc:'No rejection sensitivity'},{val:1,desc:'Mild - slight sting'},{val:2,desc:'Moderate - ruminating'},{val:3,desc:'Severe - withdrawal or anger'},{val:4,desc:'Extreme - catastrophic'}];
-var DEFAULT_PILLARS=[{id:'mind',name:'Mind',icon:'\uD83E\uDDE0',color:'var(--purple)',desc:'Mental health, therapy',rating:5},{id:'body',name:'Body',icon:'\uD83D\uDCAA',color:'var(--green)',desc:'Physical health, movement',rating:5},{id:'career',name:'Career',icon:'\uD83D\uDE80',color:'var(--primary)',desc:'Work, research, transition',rating:5},{id:'creative',name:'Creative',icon:'\uD83C\uDFA8',color:'var(--orange)',desc:'Expression, side projects',rating:5},{id:'knowledge',name:'Knowledge',icon:'\uD83D\uDCDA',color:'var(--cyan)',desc:'Learning, skills',rating:5},{id:'relationships',name:'Relationships',icon:'\u2764\uFE0F',color:'var(--pink)',desc:'Family, friends, connection',rating:5},{id:'finances',name:'Finances',icon:'\uD83D\uDCB0',color:'var(--amber)',desc:'Income, security',rating:5},{id:'environment',name:'Environment',icon:'\uD83C\uDFE1',color:'var(--rose)',desc:'Living situation, location',rating:5}];
-var DISCOVER_DOMAINS=[
-{id:'self',name:'Self',icon:'\uD83C\uDF31',color:'var(--cyan)',desc:'Identity & inner dialogue',prompts:[{key:'premise',label:'Premise',q:'What do I currently believe about myself?',hint:'Beliefs about worth, capabilities, identity.'},{key:'vision',label:'Vision',q:'Who do I want to become?',hint:'Speak to yourself with compassion.'},{key:'purpose',label:'Purpose',q:'Why does self-knowledge matter right now?',hint:'Connect to your values.'},{key:'strategy',label:'Strategy',q:'One small step this week?',hint:'5-min journal, set one boundary.'}]},
-{id:'mind',name:'Mind',icon:'\uD83E\uDDE0',color:'var(--purple)',desc:'Learning & curiosity',prompts:[{key:'premise',label:'Premise',q:'What do I believe about my capacity to learn?',hint:'ADHD brains learn differently, not worse.'},{key:'vision',label:'Vision',q:'What does my ideal intellectual life look like?',hint:'Topics that create flow state.'},{key:'purpose',label:'Purpose',q:'Why does growing my mind matter?',hint:'Career transition? Mastery?'},{key:'strategy',label:'Strategy',q:'One learning habit this week?',hint:'20-min reading, one ML tutorial.'}]},
-{id:'body',name:'Body',icon:'\uD83D\uDCAA',color:'var(--green)',desc:'Physical health & sleep',prompts:[{key:'premise',label:'Premise',q:'How do I relate to my body?',hint:'Narratives about energy, capability.'},{key:'vision',label:'Vision',q:'What does physical well-being look like?',hint:'Not perfection.'},{key:'purpose',label:'Purpose',q:'Why does body care matter now?',hint:'Connection to mental health.'},{key:'strategy',label:'Strategy',q:'One body-care action this week?',hint:'Shake, 15-min walk, consistent sleep.'}]},
-{id:'soul',name:'Soul',icon:'\uD83D\uDD4A\uFE0F',color:'var(--rose)',desc:'Meaning & inner peace',prompts:[{key:'premise',label:'Premise',q:'What gives my life meaning right now?',hint:'Doesn\'t have to be religious.'},{key:'vision',label:'Vision',q:'What would a rich inner life look like?',hint:'Awe, gratitude, flow, peace.'},{key:'purpose',label:'Purpose',q:'Why nurture inner life?',hint:'How does it affect resilience?'},{key:'strategy',label:'Strategy',q:'One practice this week?',hint:'5-min mindfulness, nature walk.'}]},
-{id:'environment',name:'Place',icon:'\uD83C\uDFE1',color:'var(--amber)',desc:'Surroundings & location',prompts:[{key:'premise',label:'Premise',q:'How does my environment affect my mental health?',hint:'Home, workspace, city.'},{key:'vision',label:'Vision',q:'Where and how do I want to live?',hint:'Sydney, London, Switzerland.'},{key:'purpose',label:'Purpose',q:'Why does environment matter so much?',hint:'Situational vs. internal?'},{key:'strategy',label:'Strategy',q:'What can I change this week?',hint:'Declutter, research relocation.'}]},
-{id:'relationships',name:'People',icon:'\u2764\uFE0F',color:'var(--pink)',desc:'Intimate, friends, family',prompts:[{key:'premise',label:'Premise',q:'What patterns do I notice in my relationships?',hint:'Attachment, fear of abandonment.'},{key:'vision',label:'Vision',q:'What do ideal relationships look like?',hint:'Not just romantic.'},{key:'purpose',label:'Purpose',q:'Why do relationships matter?',hint:'Loneliness, support systems.'},{key:'strategy',label:'Strategy',q:'One relational step this week?',hint:'Reach out, set one boundary.'}]},
-{id:'money',name:'Money',icon:'\uD83D\uDCB0',color:'var(--orange)',desc:'Finances & security',prompts:[{key:'premise',label:'Premise',q:'What are my core beliefs about money?',hint:'Family stories, academic salary.'},{key:'vision',label:'Vision',q:'What does financial security look like?',hint:'What does money enable?'},{key:'purpose',label:'Purpose',q:'Why does getting finances right matter now?',hint:'Transition, relocation, HolisticHer.'},{key:'strategy',label:'Strategy',q:'One financial action this week?',hint:'Review budget, research salaries.'}]},
-{id:'mission',name:'Mission',icon:'\u2B50',color:'var(--primary)',desc:'Purpose, calling, legacy',prompts:[{key:'premise',label:'Premise',q:'What do I believe my purpose is right now?',hint:'Researcher to health tech.'},{key:'vision',label:'Vision',q:'If I could do anything, what would my life\'s work look like?',hint:'Dream without constraints.'},{key:'purpose',label:'Purpose',q:'Why does having a mission matter?',hint:'Purpose vs. drifting.'},{key:'strategy',label:'Strategy',q:'One step toward my mission this week?',hint:'Define ideal role, network.'}]}];
-var DEFAULT_SAFETY={professionals:[{name:'Dr. Blake Bourgoyne',role:'Psychiatrist',phone:''},{name:'Crisis Line (US)',role:'988 Suicide & Crisis',phone:'988'},{name:'Emergency US',role:'',phone:'911'},{name:'Emergency AU',role:'',phone:'000'}],warnings:['Ruminating on past failures >30 min','Withdrawing from all contact','Dissociating: losing time','Romanticizing death or "peace"','False sense of peace / giving things away'],copingSteps:[{text:'Ice shower: full body cold exposure',timer:300},{text:'4-7-8 breathing (4 inhale, 7 hold, 8 exhale)',timer:150},{text:'Leave the house: any destination',timer:0},{text:'Loud music + movement',timer:0},{text:'Handwrite what you\'re feeling',timer:0}],reasons:['HolisticHer work: women need this','Family: Mum, Dad, siblings','Unfinished research that matters','The person you\'re becoming'],messageTemplates:[{label:'Need to talk',text:'Hey, I\'m not doing great right now and could really use someone to talk to. Are you free?'},{label:'Not safe',text:'I need help. I\'m not feeling safe right now. Can you come over or call me?'},{label:'Just reaching out',text:'Hey, just wanted to say hi. I\'m trying to stay connected today.'}]};
-var QUICK_MOODS=[{v:2,e:'\uD83D\uDE2B',l:'Rough'},{v:4,e:'\uD83D\uDE14',l:'Low'},{v:6,e:'\uD83D\uDE10',l:'OK'},{v:8,e:'\uD83D\uDE0A',l:'Good'},{v:10,e:'\uD83E\uDD29',l:'Great'}];
-
-/* SHARED COMPONENTS */
-function Slider(p){return h('div',{style:{marginBottom:6}},h('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:3}},h('span',{style:{fontSize:'0.62rem',color:'var(--text-secondary)'}},p.label),h('span',{style:{fontSize:'0.66rem',fontWeight:700,color:p.color||'var(--primary)'}},p.value)),h('input',{type:'range',min:p.min||0,max:p.max||10,step:1,value:p.value,onChange:function(e){p.onChange(parseInt(e.target.value))}}))}
-function Sparkline(p){var data=p.data||[];if(data.length<2)return null;var w=p.width||80;var ht=p.height||22;var mn=Math.min.apply(null,data);var mx=Math.max.apply(null,data);var range=mx-mn||1;var pts=data.map(function(v,i){return(i/(data.length-1))*w+','+(ht-2-((v-mn)/range)*(ht-4))}).join(' ');return h('svg',{width:w,height:ht,style:{display:'block'}},h('polyline',{points:pts,fill:'none',stroke:p.color||'var(--primary)',strokeWidth:1.5,strokeLinecap:'round'}))}
-function NSBadge(p){var st=AUTONOMIC_STATES.find(function(s){return s.id===p.state});if(!st)return null;return h('span',{className:'ns-badge',style:{background:st.dimColor,color:st.color}},st.icon,' ',st.subtitle)}
-function EmotionPicker(p){var _c=useState(null);var cat=_c[0];var setCat=_c[1];if(!cat)return h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},Object.keys(EMOTION_WHEEL).map(function(c){var ew=EMOTION_WHEEL[c];return h('button',{key:c,className:'pill'+(p.value&&ew.children.indexOf(p.value)>=0?' active':''),onClick:function(){setCat(c)},style:{borderColor:ew.color,color:ew.color}},c.charAt(0).toUpperCase()+c.slice(1))}));var ew=EMOTION_WHEEL[cat];return h('div',null,h('button',{className:'btn-ghost',onClick:function(){setCat(null)},style:{marginBottom:6}},'\u2190 Back'),h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},ew.children.map(function(e){return h('button',{key:e,className:'pill'+(p.value===e?' active':''),onClick:function(){p.onChange(e)},style:{borderColor:ew.color}},e)})))}
-function PolyvagalLadder(p){return h('div',null,AUTONOMIC_STATES.map(function(st){var sel=p.value===st.id;return h('div',{key:st.id,className:'pv-rung'+(sel?' selected':''),style:{background:sel?st.dimColor:'rgba(255,255,255,0.015)',color:st.color},onClick:function(){p.onChange(st.id)}},h('div',{className:'pv-dot',style:{background:sel?st.color:'rgba(255,255,255,0.08)'}}),h('div',{style:{flex:1}},h('div',{className:'pv-label'},st.icon,' ',st.name),h('div',{className:'pv-desc'},st.desc)),sel&&h('span',{style:{fontSize:'0.7rem'}},'\u2713'))}))}
-function SomaticPicker(p){var markers=SOMATIC_MARKERS[p.autonomicState]||SOMATIC_MARKERS.ventral;var sel=p.value||[];return h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},markers.map(function(m){var a=sel.indexOf(m)>=0;return h('button',{key:m,className:'pill'+(a?' active':''),onClick:function(){a?p.onChange(sel.filter(function(x){return x!==m})):p.onChange(sel.concat(m))}},m)}))}
-function WindowIndicator(p){var zones=[{id:'above',label:'Above',color:'var(--red)',icon:'\u2191'},{id:'in',label:'In Window',color:'var(--green)',icon:'\u2194'},{id:'below',label:'Below',color:'var(--blue)',icon:'\u2193'}];return h('div',{style:{display:'flex',gap:6}},zones.map(function(z){var sel=p.value===z.id;return h('button',{key:z.id,className:'pill'+(sel?' active':''),style:sel?{background:z.color==='var(--green)'?'var(--green-dim)':z.color==='var(--red)'?'var(--red-dim)':'var(--blue-dim)',borderColor:z.color,color:z.color}:{},onClick:function(){p.onChange(z.id)}},z.icon,' ',z.label)}))}
-function Timer(p){var _t=useState(p.seconds||60);var left=_t[0];var setLeft=_t[1];var _r=useState(false);var running=_r[0];var setRunning=_r[1];var ref=useRef(null);useEffect(function(){if(!running)return;ref.current=setInterval(function(){setLeft(function(prev){if(prev<=1){clearInterval(ref.current);setRunning(false);return 0}return prev-1})},1000);return function(){clearInterval(ref.current)}},[running]);var mm=Math.floor(left/60);var ss=left%60;return h('div',{style:{display:'flex',alignItems:'center',gap:8}},h('span',{style:{fontSize:'0.78rem',fontWeight:700,fontFamily:'monospace',minWidth:48}},mm+':'+(ss<10?'0':'')+ss),h('button',{className:'btn-ghost',onClick:function(){setRunning(!running)}},running?'Pause':'Start'),h('button',{className:'btn-ghost',onClick:function(){setLeft(p.seconds||60);setRunning(false)}},'Reset'))}
-function InteractiveWheel(p){var pillars=p.pillars||[];var ratings=p.ratings||{};var n=pillars.length;var _ed=useState(null);var editing=_ed[0];var setEditing=_ed[1];if(!n)return null;var size=p.size||240;var cx=size/2;var cy=size/2;var maxR=size/2-30;function point(i,r){var a=(2*Math.PI*i/n)-Math.PI/2;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}var gc=[2,4,6,8,10].map(function(v){return h('circle',{key:'g'+v,cx:cx,cy:cy,r:maxR*v/10,fill:'none',stroke:'rgba(255,255,255,0.04)',strokeWidth:1})});var gl=[2,4,6,8,10].map(function(v){return h('text',{key:'gl'+v,x:cx+3,y:cy-maxR*v/10+3,fill:'rgba(255,255,255,0.12)',fontSize:'0.40rem'},v)});var axes=pillars.map(function(pl,i){var pt=point(i,maxR+16);return h('g',{key:'a'+i},h('line',{x1:cx,y1:cy,x2:point(i,maxR)[0],y2:point(i,maxR)[1],stroke:'rgba(255,255,255,0.04)',strokeWidth:1}),h('text',{x:pt[0],y:pt[1]+4,textAnchor:pt[0]<cx-5?'end':pt[0]>cx+5?'start':'middle',fill:editing===i?pl.color:'var(--text-muted)',fontSize:'0.52rem',fontWeight:editing===i?700:600,style:{cursor:'pointer'}},pl.icon))});var dp=pillars.map(function(pl,i){return point(i,maxR*(ratings[pl.id]||5)/10)});var poly=dp.map(function(pt){return pt[0]+','+pt[1]}).join(' ');var wedges=pillars.map(function(pl,i){var a1=(2*Math.PI*((i-0.5)/n))-Math.PI/2;var a2=(2*Math.PI*((i+0.5)/n))-Math.PI/2;var oR=maxR+14;var d='M '+cx+' '+cy+' L '+(cx+oR*Math.cos(a1))+' '+(cy+oR*Math.sin(a1))+' A '+oR+' '+oR+' 0 0 1 '+(cx+oR*Math.cos(a2))+' '+(cy+oR*Math.sin(a2))+' Z';return h('path',{key:'w'+i,d:d,fill:'transparent',className:'wheel-touch-area',onClick:function(){setEditing(editing===i?null:i)}})});var dots=dp.map(function(pt,i){var isEd=editing===i;return h('circle',{key:'d'+i,cx:pt[0],cy:pt[1],r:isEd?7:5,fill:pillars[i].color,stroke:isEd?'#fff':'var(--bg)',strokeWidth:isEd?3:2,style:{cursor:'pointer',transition:'all 0.15s'},onClick:function(){setEditing(editing===i?null:i)}})});return h('div',null,h('svg',{width:size,height:size,viewBox:'0 0 '+size+' '+size,style:{display:'block',margin:'0 auto'}},gc,gl,axes,h('polygon',{points:poly,fill:'rgba(26,107,90,0.12)',stroke:'var(--primary)',strokeWidth:1.5,strokeLinejoin:'round'}),dots,wedges),editing!==null&&h('div',{className:'fade-in',style:{marginTop:10,padding:'10px 14px',background:'var(--bg-card)',border:'1px solid '+pillars[editing].color+'40',borderRadius:'var(--radius)',borderLeft:'3px solid '+pillars[editing].color}},h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}},h('div',{style:{display:'flex',alignItems:'center',gap:6}},h('span',{style:{fontSize:'1rem'}},pillars[editing].icon),h('span',{style:{fontSize:'0.78rem',fontWeight:700}},pillars[editing].name)),h('span',{style:{fontSize:'1.1rem',fontWeight:800,color:pillars[editing].color}},ratings[pillars[editing].id]||5)),h(Slider,{label:'',value:ratings[pillars[editing].id]||5,color:pillars[editing].color,max:10,onChange:function(v){p.onRate(pillars[editing].id,v)}}),h('div',{style:{display:'flex',gap:4,marginTop:4}},editing>0&&h('button',{className:'btn-ghost',style:{fontSize:'0.54rem',padding:'3px 10px'},onClick:function(){setEditing(editing-1)}},'\u2190 '+pillars[editing-1].icon),h('div',{style:{flex:1}}),editing<pillars.length-1&&h('button',{className:'btn-ghost',style:{fontSize:'0.54rem',padding:'3px 10px'},onClick:function(){setEditing(editing+1)}},pillars[editing+1].icon+' \u2192'))))}
-/* Crisis */
-function CrisisOverlay(p){var _e=useState('coping');var exp=_e[0];var setExp=_e[1];var _ch=useState({});var ch=_ch[0];var setCh=_ch[1];function tc(k){var n=Object.assign({},ch);n[k]=!n[k];setCh(n)}var s=DEFAULT_SAFETY;return h('div',{className:'crisis-overlay fade-in'},h('div',{style:{maxWidth:600,margin:'0 auto'}},h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}},h('div',null,h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1.2rem'}},'Crisis Support'),h('div',{style:{fontSize:'0.66rem',color:'var(--text-muted)',marginTop:3}},'You are not alone. This will pass.')),h('button',{className:'btn-ghost',onClick:p.onClose},'\u2715 Close')),h('div',{className:'grid-3',style:{marginBottom:14}},s.messageTemplates.map(function(mt,i){return h('button',{key:i,className:'btn-ghost',style:{textAlign:'center',padding:'10px 8px'},onClick:function(){if(navigator.clipboard)navigator.clipboard.writeText(mt.text)}},h('div',{style:{fontSize:'0.68rem',fontWeight:600}},mt.label),h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',marginTop:2}},'Tap to copy'))})),['coping','warn','reasons','contacts'].map(function(sec){var titles={coping:'\uD83E\uDDCA Coping Steps',warn:'\u26A0\uFE0F Warning Signs',reasons:'\uD83D\uDC9A Reasons to Live',contacts:'\uD83D\uDCF1 Contacts'};var items=sec==='coping'?s.copingSteps.map(function(cs,i){return h('div',{key:i,style:{marginBottom:8}},h('div',{className:'check-item'+(ch['c'+i]?' checked':''),onClick:function(){tc('c'+i)}},h('div',{className:'check-box'},ch['c'+i]?'\u2713':''),h('div',{className:'check-text'},cs.text)),cs.timer>0&&h('div',{style:{marginTop:4,marginLeft:28}},h(Timer,{seconds:cs.timer})))}):sec==='warn'?s.warnings.map(function(w,i){return h('div',{key:i,className:'check-item'+(ch['w'+i]?' checked':''),style:{marginBottom:4},onClick:function(){tc('w'+i)}},h('div',{className:'check-box'},ch['w'+i]?'\u2713':''),h('div',{className:'check-text'},w))}):sec==='reasons'?s.reasons.map(function(r,i){return h('div',{key:i,className:'check-item checked',style:{marginBottom:4}},h('div',{className:'check-box'},'\u2665'),h('div',{className:'check-text'},r))}):s.professionals.map(function(pr,i){return h('div',{key:i,style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'6px 10px',background:'rgba(255,255,255,0.02)',borderRadius:'var(--radius-sm)',marginBottom:4}},h('div',null,h('div',{style:{fontSize:'0.68rem',fontWeight:600}},pr.name),pr.role&&h('div',{style:{fontSize:'0.54rem',color:'var(--text-muted)'}},pr.role)),pr.phone&&h('a',{href:'tel:'+pr.phone,style:{color:'var(--primary)',fontSize:'0.70rem',fontWeight:700,textDecoration:'none'},onClick:function(e){e.stopPropagation()}},pr.phone))});return h('div',{key:sec,className:'crisis-section',onClick:function(){setExp(exp===sec?null:sec)}},h('div',{className:'crisis-section-title'},titles[sec]),exp===sec&&h('div',{style:{padding:'0 16px 12px'},onClick:function(e){e.stopPropagation()}},items))})))}
-
-/* APP */
+/* ===== APP ===== */
 function App(){
-var _s=useState(function(){var d=load();if(!d.tasks||d.tasks.length===0){d.tasks=DEFAULT_TASKS;d.taskIdCounter=100;save(d)}if(!d.milestones)d.milestones=[];return d});var store=_s[0];var setStore=_s[1];
-var _tab=useState('daily');var tab=_tab[0];var setTab=_tab[1];
-var _crisis=useState(false);var crisis=_crisis[0];var setCrisis=_crisis[1];
-var todayKey=today();var todayData=(store.days&&store.days[todayKey])||{};
-function updateStore(fn){var s=JSON.parse(JSON.stringify(store));fn(s);save(s);setStore(s)}
-function updateDay(key,val){updateStore(function(s){if(!s.days)s.days={};if(!s.days[todayKey])s.days[todayKey]={};s.days[todayKey][key]=val})}
-var consistency=useMemo(function(){var c=0;var d=new Date();for(var i=0;i<14;i++){var dt=new Date(d);dt.setDate(dt.getDate()-i);var k=dt.toISOString().slice(0,10);var day=store.days&&store.days[k];if(day&&(day.morning_done||day.evening_done))c++}return c},[store]);
-var moodHistory=useMemo(function(){var a=[];var d=new Date();for(var i=13;i>=0;i--){var dt=new Date(d);dt.setDate(dt.getDate()-i);var k=dt.toISOString().slice(0,10);var day=store.days&&store.days[k];if(day&&day.mood!=null)a.push(day.mood)}return a},[store]);
-var energyHistory=useMemo(function(){var a=[];var d=new Date();for(var i=13;i>=0;i--){var dt=new Date(d);dt.setDate(dt.getDate()-i);var k=dt.toISOString().slice(0,10);var day=store.days&&store.days[k];if(day&&day.energy!=null)a.push(day.energy)}return a},[store]);
-var heatmap=useMemo(function(){var a=[];var d=new Date();d.setDate(d.getDate()-d.getDay());for(var i=0;i<7;i++){var dt=new Date(d);dt.setDate(dt.getDate()+i);var k=dt.toISOString().slice(0,10);var day=store.days&&store.days[k]||{};var sc=0;if(day.morning_done)sc++;if(day.evening_done)sc++;a.push({date:k,day:DAYS[dt.getDay()],score:sc,isToday:k===todayKey})}return a},[store]);
-/* Insights engine */
-var insights=useMemo(function(){var res=[];var dKeys=Object.keys(store.days||{}).sort().slice(-14);if(dKeys.length<3)return res;var exDays=dKeys.filter(function(k){return store.days[k].exercised});var noExDays=dKeys.filter(function(k){return!store.days[k].exercised&&store.days[k].mood!=null});if(exDays.length>=2&&noExDays.length>=2){var exMood=exDays.reduce(function(s,k){return s+(store.days[k].mood||5)},0)/exDays.length;var noMood=noExDays.reduce(function(s,k){return s+(store.days[k].mood||5)},0)/noExDays.length;var diff=Math.round((exMood-noMood)*10)/10;if(diff>0.3)res.push({icon:'\uD83C\uDFC3',text:'Days you exercise, mood averages '+diff.toFixed(1)+' points higher'})}
-var goodSleep=dKeys.filter(function(k){return store.days[k].sleep_quality==='Good'&&store.days[k].energy!=null});var badSleep=dKeys.filter(function(k){return store.days[k].sleep_quality==='Bad'&&store.days[k].energy!=null});if(goodSleep.length>=2&&badSleep.length>=1){var gE=goodSleep.reduce(function(s,k){return s+(store.days[k].energy||5)},0)/goodSleep.length;var bE=badSleep.reduce(function(s,k){return s+(store.days[k].energy||5)},0)/badSleep.length;var d2=Math.round((gE-bE)*10)/10;if(d2>0.5)res.push({icon:'\uD83D\uDCA4',text:'Good sleep = '+d2.toFixed(1)+' more energy points next day'})}
-var shakeDays=dKeys.filter(function(k){return store.days[k].protein_shake&&store.days[k].energy!=null});var noShake=dKeys.filter(function(k){return!store.days[k].protein_shake&&store.days[k].energy!=null});if(shakeDays.length>=2&&noShake.length>=2){var sE=shakeDays.reduce(function(s,k){return s+(store.days[k].energy||5)},0)/shakeDays.length;var nE=noShake.reduce(function(s,k){return s+(store.days[k].energy||5)},0)/noShake.length;var d3=Math.round((sE-nE)*10)/10;if(Math.abs(d3)>0.3)res.push({icon:'\uD83E\uDD64',text:d3>0?'Protein shake days: +'+d3.toFixed(1)+' energy':'Shake doesn\'t seem to affect energy much'})}
-return res},[store]);
-/* Task helpers */
-var allTasks=store.tasks||[];var todayTaskIds=(todayData.todayTasks||[]);var todayTasks=todayTaskIds.map(function(id){return allTasks.find(function(t){return t.id===id})}).filter(Boolean);
-var activeTasks=allTasks.filter(function(t){return t.category==='active'&&!t.done});var waitingTasks=allTasks.filter(function(t){return t.category==='waiting'&&!t.done});var somedayTasks=allTasks.filter(function(t){return t.category==='someday'&&!t.done});
-var doneTodayCount=allTasks.filter(function(t){return t.done&&t.doneDate===todayKey}).length;
-function toggleTask(id){updateStore(function(s){s.tasks=s.tasks.map(function(t){return t.id===id?Object.assign({},t,{done:!t.done,doneDate:t.done?null:todayKey}):t})})}
-function removeTask(id){updateStore(function(s){s.tasks=s.tasks.filter(function(t){return t.id!==id})})}
-function addTask(text,cat){updateStore(function(s){var id='t'+(s.taskIdCounter||100);s.taskIdCounter=(s.taskIdCounter||100)+1;s.tasks.push({id:id,text:text,meta:'Added '+todayKey,category:cat||'active',done:false,priority:2})})}
-function assignToday(taskId){updateStore(function(s){if(!s.days)s.days={};if(!s.days[todayKey])s.days[todayKey]={};var arr=s.days[todayKey].todayTasks||[];if(arr.indexOf(taskId)>=0)arr=arr.filter(function(x){return x!==taskId});else arr.push(taskId);s.days[todayKey].todayTasks=arr})}
-function isAssignedToday(taskId){return todayTaskIds.indexOf(taskId)>=0}
-var pillarRatingsObj=useMemo(function(){var r={};DEFAULT_PILLARS.forEach(function(p){r[p.id]=p.rating});var lr=store.pillarRatings&&store.pillarRatings[0];if(lr)Object.keys(lr.ratings||{}).forEach(function(k){r[k]=lr.ratings[k]});return r},[store]);
+  var _s=useState(loadStore);var store=_s[0];var setStoreRaw=_s[1];
+  var _t=useState('daily');var tab=_t[0];var setTab=_t[1];
+  var _cr=useState(false);var crisis=_cr[0];var setCrisis=_cr[1];
+  var _set=useState(false);var showSettings=_set[0];var setShowSettings=_set[1];
 
-/* === DAILY TAB === Progressive: shows next uncompleted section */
-function DailyTab(){
-var _pk=useState(false);var showPicker=_pk[0];var setShowPicker=_pk[1];
-var _nt=useState('');var newTask=_nt[0];var setNewTask=_nt[1];
-var _ql=useState(false);var quickLogged=_ql[0];var setQuickLogged=_ql[1];
-function handleQuickAdd(){if(!newTask.trim())return;updateStore(function(s){var id='t'+(s.taskIdCounter||100);s.taskIdCounter=(s.taskIdCounter||100)+1;s.tasks.push({id:id,text:newTask.trim(),meta:'Added '+todayKey,category:'active',done:false,priority:2});if(!s.days)s.days={};if(!s.days[todayKey])s.days[todayKey]={};var arr=s.days[todayKey].todayTasks||[];arr.push(id);s.days[todayKey].todayTasks=arr});setNewTask('')}
-/* Determine which section is "next" */
-var morningDone=todayData.morning_done;var eveningDone=todayData.evening_done;
-/* Step indicator */
-var steps=[{id:'morning',label:'\u2600\uFE0F',done:morningDone},{id:'focus',label:'\uD83C\uDFAF',done:false},{id:'evening',label:'\uD83C\uDF1A',done:eveningDone}];
-return h('div',{className:'fade-in'},
-/* Quick Log bar - always visible, 2-tap mood */
-h('div',{className:'quick-log-bar'},h('span',{style:{fontSize:'0.58rem',fontWeight:700,color:'var(--text-muted)',whiteSpace:'nowrap'}},'Quick:'),h('div',{className:'quick-mood'},QUICK_MOODS.map(function(m){var sel=todayData.quick_mood===m.v;return h('button',{key:m.v,className:'mood-btn'+(sel?' selected pop':''),title:m.l,onClick:function(){updateDay('quick_mood',m.v);updateDay('mood',m.v);setQuickLogged(true);setTimeout(function(){setQuickLogged(false)},1200)}},m.e)})),quickLogged&&h('span',{className:'fade-in',style:{fontSize:'0.58rem',color:'var(--green)',fontWeight:600,whiteSpace:'nowrap'}},'\u2713 Logged')),
-/* Step progress */
-h('div',{className:'step-indicator'},steps.map(function(s,i){return h(React.Fragment,{key:s.id},h('div',{className:'step-dot'+(s.done?' done':!morningDone&&i===0||morningDone&&i===1&&!eveningDone||morningDone&&eveningDone&&i===2?' current':'')},s.done?'\u2713':s.label),i<steps.length-1&&h('div',{className:'step-line'+(s.done?' done':'')}))})),
-/* Stats (compact) */
-h('div',{className:'stats-strip'},h('div',{className:'stat-card'},h('div',{className:'stat-label'},'Mood'),h('div',{className:'sparkline-container'},h('span',{className:'stat-value'},todayData.mood!=null?todayData.mood:'--'),moodHistory.length>1&&h(Sparkline,{data:moodHistory,color:'var(--primary)',width:40,height:16}))),h('div',{className:'stat-card'},h('div',{className:'stat-label'},'Energy'),h('div',{className:'sparkline-container'},h('span',{className:'stat-value'},todayData.energy!=null?todayData.energy:'--'),energyHistory.length>1&&h(Sparkline,{data:energyHistory,color:'var(--green)',width:40,height:16}))),h('div',{className:'stat-card'},h('div',{className:'stat-label'},'Sleep'),h('div',{className:'stat-value'},todayData.sleep_hrs?todayData.sleep_hrs+'h':'--')),h('div',{className:'stat-card'},h('div',{className:'stat-label'},'Focus'),h('div',{className:'stat-value'},todayTasks.filter(function(t){return t.done}).length+'/'+todayTasks.length))),
-/* Insights */
-insights.length>0&&h('div',{style:{marginBottom:10}},insights.map(function(ins,i){return h('div',{key:i,className:'insight-card fade-in'},h('span',{className:'insight-icon'},ins.icon),h('span',{className:'insight-text'},ins.text))})),
-/* Week heatmap */
-h('div',{className:'card',style:{padding:'8px 14px',marginBottom:10}},h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:3}},h('span',{style:{fontSize:'0.52rem',fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'1px'}},'This Week'),h('span',{style:{fontSize:'0.48rem',color:'var(--text-muted)'}},consistency+'/14 days')),h('div',{className:'heatmap-row'},heatmap.map(function(d){var bg=d.score===2?'var(--primary)':d.score===1?'var(--primary-dim)':'rgba(255,255,255,0.03)';var color=d.score===2?'#fff':d.score===1?'var(--primary)':'var(--text-muted)';return h('div',{key:d.date,style:{textAlign:'center'}},h('div',{className:'heatmap-label'},d.day),h('div',{className:'heatmap-cell',style:{background:bg,color:color,border:d.isToday?'2px solid var(--accent)':'1px solid var(--border)'}},d.score===2?'\u2713\u2713':d.score===1?'\u2713':'\u00B7'))}))),
-/* === MORNING === */
-morningDone?h('div',{className:'card collapsed',onClick:function(){updateDay('morning_done',false)}},h('div',{className:'summary-strip'},h('span',{className:'summary-done',style:{color:'var(--primary)'}},'\u2713 Morning'),h('div',{className:'summary-details'},todayData.weight&&h('span',null,todayData.weight+'kg'),todayData.sleep_hrs&&h('span',null,todayData.sleep_hrs+'h'),todayData.protein_shake&&h('span',{style:{color:'var(--primary)'}},'\u2713 Shake'),todayData.medication&&h('span',{style:{color:'var(--primary)'}},'\u2713 Meds')))):
-h('div',{className:'card fade-in',style:{borderLeft:'3px solid var(--primary)'}},h('div',{className:'card-title'},'\u2600\uFE0F Morning'),h('div',{className:'grid-3',style:{marginBottom:8}},h('div',null,h('label',{style:{fontSize:'0.54rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Weight'),h('input',{type:'number',step:'0.1',placeholder:'kg',value:todayData.weight||'',style:{textAlign:'center'},onChange:function(e){updateDay('weight',e.target.value)}})),h('div',null,h('label',{style:{fontSize:'0.54rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Sleep'),h('input',{type:'number',step:'0.5',placeholder:'hrs',value:todayData.sleep_hrs||'',style:{textAlign:'center'},onChange:function(e){updateDay('sleep_hrs',e.target.value)}})),h('div',null,h('label',{style:{fontSize:'0.54rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Quality'),h('div',{style:{display:'flex',gap:3}},['Bad','OK','Good'].map(function(q){return h('button',{key:q,className:'pill'+(todayData.sleep_quality===q?' active':''),style:{flex:1,padding:'5px 0'},onClick:function(){updateDay('sleep_quality',q)}},q)})))),h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr auto auto',gap:6,marginBottom:8,alignItems:'end'}},h('div',null,h('label',{style:{fontSize:'0.54rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'BP Sys'),h('input',{type:'number',placeholder:'120',value:todayData.bp_sys||'',style:{textAlign:'center'},onChange:function(e){updateDay('bp_sys',e.target.value)}})),h('div',null,h('label',{style:{fontSize:'0.54rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'BP Dia'),h('input',{type:'number',placeholder:'80',value:todayData.bp_dia||'',style:{textAlign:'center'},onChange:function(e){updateDay('bp_dia',e.target.value)}})),h('div',{className:'check-item'+(todayData.protein_shake?' checked':''),onClick:function(){updateDay('protein_shake',!todayData.protein_shake)}},h('div',{className:'check-box'},todayData.protein_shake?'\u2713':''),h('div',{className:'check-text'},'Shake')),h('div',{className:'check-item'+(todayData.medication?' checked':''),onClick:function(){updateDay('medication',!todayData.medication)}},h('div',{className:'check-box'},todayData.medication?'\u2713':''),h('div',{className:'check-text'},'Meds'))),h('div',{style:{marginBottom:10}},h('input',{type:'text',placeholder:'Today\'s intention: what matters most?',value:todayData.intentions||'',onChange:function(e){updateDay('intentions',e.target.value)},onKeyDown:function(e){if(e.key==='Enter'){updateDay('morning_done',true);updateDay('morning_time',now())}}})),h('button',{className:'btn-primary',onClick:function(){updateDay('morning_done',true);updateDay('morning_time',now())}},'Done \u2713')),
-/* Intention banner */
-todayData.intentions&&morningDone&&h('div',{className:'card',style:{borderLeft:'3px solid var(--accent)',padding:'8px 14px'}},h('div',{style:{fontSize:'0.50rem',fontWeight:700,color:'var(--accent)',textTransform:'uppercase',letterSpacing:'1px',marginBottom:2}},'Intention'),h('div',{style:{fontSize:'0.72rem',lineHeight:1.4}},todayData.intentions)),
-/* === TODAY'S FOCUS === */
-h('div',{className:'section-label',style:{marginTop:10}},'Today\'s Focus'),
-h('div',{className:'card'},todayTasks.length===0?h('div',{style:{textAlign:'center',padding:'14px 0'}},h('div',{style:{fontSize:'0.70rem',color:'var(--text-muted)',marginBottom:6}},'What are you working on today?'),h('div',{style:{display:'flex',gap:6,justifyContent:'center'}},h('button',{className:'btn-ghost',onClick:function(){setShowPicker(true)}},'\u2795 Pick from backlog'))):h('div',null,todayTasks.sort(function(a,b){return(a.done?1:0)-(b.done?1:0)||(a.priority||2)-(b.priority||2)}).map(function(t){return h('div',{key:t.id,className:'task-item'},h('div',{className:'task-check'+(t.done?' done check-pulse':''),onClick:function(){toggleTask(t.id)}},t.done?'\u2713':''),h('div',{className:'task-content'},h('div',{className:'task-title'+(t.done?' done':'')},t.text),t.meta&&h('div',{className:'task-meta'},t.meta)),h('button',{className:'task-delete',onClick:function(){assignToday(t.id)}},'\u2715'))}),h('button',{className:'btn-ghost',style:{fontSize:'0.52rem',marginTop:6},onClick:function(){setShowPicker(true)}},'\u2795 More')),h('div',{className:'add-task-row'},h('input',{type:'text',placeholder:'+ Quick add for today...',value:newTask,onChange:function(e){setNewTask(e.target.value)},onKeyDown:function(e){if(e.key==='Enter')handleQuickAdd()}}),newTask.trim()&&h('button',{className:'add-task-btn',onClick:handleQuickAdd},'Add'))),
-/* Task picker */
-showPicker&&h('div',{className:'modal-overlay',onClick:function(e){if(e.target===e.currentTarget)setShowPicker(false)}},h('div',{className:'modal-sheet'},h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}},h('h2',{style:{fontFamily:'var(--font-heading)',fontSize:'0.94rem'}},'Pick for today'),h('button',{className:'btn-ghost',onClick:function(){setShowPicker(false)}},'Done')),activeTasks.map(function(t){var assigned=isAssignedToday(t.id);return h('div',{key:t.id,style:{display:'flex',alignItems:'center',gap:8,padding:'8px 0',borderBottom:'1px solid var(--border-subtle)',cursor:'pointer'},onClick:function(){assignToday(t.id)}},h('div',{style:{width:20,height:20,borderRadius:5,border:assigned?'none':'2px dashed var(--border)',background:assigned?'var(--accent)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.6rem',color:'#fff',flexShrink:0}},assigned?'\u2713':''),h('div',{style:{flex:1}},h('div',{style:{fontSize:'0.68rem',fontWeight:600,color:assigned?'var(--accent)':'var(--text-secondary)'}},t.text),t.meta&&h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)'}},t.meta)),t.priority===1&&h('span',{style:{fontSize:'0.46rem',padding:'1px 5px',borderRadius:8,background:'var(--red-dim)',color:'var(--red)',fontWeight:600}},'!'))}),waitingTasks.length>0&&h('div',null,h('div',{className:'section-label',style:{margin:'8px 0 4px'}},'Waiting'),waitingTasks.map(function(t){var assigned=isAssignedToday(t.id);return h('div',{key:t.id,style:{display:'flex',alignItems:'center',gap:8,padding:'6px 0',borderBottom:'1px solid var(--border-subtle)',cursor:'pointer'},onClick:function(){assignToday(t.id)}},h('div',{style:{width:20,height:20,borderRadius:5,border:assigned?'none':'2px dashed var(--border)',background:assigned?'var(--accent)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.6rem',color:'#fff',flexShrink:0}},assigned?'\u2713':''),h('div',{style:{flex:1}},h('div',{style:{fontSize:'0.68rem',fontWeight:600,color:'var(--text-secondary)'}},t.text)),h('span',{className:'waiting-badge'},'Waiting'))})))),
-/* === EVENING === */
-h('div',{className:'section-label',style:{marginTop:12}},'Evening'),
-eveningDone?h('div',{className:'card collapsed',onClick:function(){updateDay('evening_done',false)}},h('div',{className:'summary-strip'},h('span',{className:'summary-done',style:{color:'var(--purple)'}},'\u2713 Evening'),h('div',{className:'summary-details'},todayData.mood!=null&&h('span',null,'Mood '+todayData.mood),todayData.exercised&&h('span',{style:{color:'var(--green)'}},'\u2713 Exercise'),todayData.emotion&&h('span',null,todayData.emotion)))):
-h('div',{className:'card fade-in',style:{borderLeft:'3px solid var(--purple)'}},h('div',{className:'card-title'},'\uD83C\uDF1A Evening'),h('div',{style:{marginBottom:8}},h(Slider,{label:'Mood',value:todayData.mood||5,onChange:function(v){updateDay('mood',v)},color:'var(--primary)',max:10}),h(Slider,{label:'Energy',value:todayData.energy||5,onChange:function(v){updateDay('energy',v)},color:'var(--green)',max:10})),h('div',{style:{display:'flex',gap:6,marginBottom:8}},h('div',{className:'check-item'+(todayData.exercised?' checked':''),style:{flex:1},onClick:function(){updateDay('exercised',!todayData.exercised)}},h('div',{className:'check-box'},todayData.exercised?'\u2713':''),h('div',{className:'check-text'},'Exercised')),h('div',{className:'check-item'+(todayData.good_nutrition?' checked':''),style:{flex:1},onClick:function(){updateDay('good_nutrition',!todayData.good_nutrition)}},h('div',{className:'check-box'},todayData.good_nutrition?'\u2713':''),h('div',{className:'check-text'},'Nutrition'))),h('div',{style:{marginBottom:8}},h('input',{type:'text',placeholder:'Win or gratitude today?',value:todayData.wins||'',onChange:function(e){updateDay('wins',e.target.value)}})),h('div',{style:{display:'flex',flexWrap:'wrap',gap:3,marginBottom:10}},['Happy','Grateful','Calm','Focused','Anxious','Frustrated','Sad','Numb','Overwhelmed','Proud'].map(function(em){return h('button',{key:em,className:'pill'+(todayData.emotion===em?' active':''),onClick:function(){updateDay('emotion',todayData.emotion===em?'':em)}},em)})),h('button',{className:'btn-primary',style:{background:'var(--purple)'},onClick:function(){updateDay('evening_done',true);updateDay('evening_time',now())}},'Done \u2713'))
-)}
+  function setStore(fn){
+    setStoreRaw(function(prev){
+      var next=typeof fn==='function'?fn(JSON.parse(JSON.stringify(prev))):fn;
+      saveStore(next);return next;
+    });
+  }
 
-/* === REGULATE TAB === */
-function RegulateTab(){
-var _m=useState(null);var mode=_m[0];var setMode=_m[1];var _st=useState(0);var step=_st[0];var setStep=_st[1];
-var _mood=useState(5);var mood=_mood[0];var setMood=_mood[1];var _en=useState(5);var energy=_en[0];var setEnergy=_en[1];
-var _emo=useState('');var emotion=_emo[0];var setEmotion=_emo[1];var _int=useState(5);var intensity=_int[0];var setIntensity=_int[1];
-var _au=useState('ventral');var autonomic=_au[0];var setAutonomic=_au[1];var _wot=useState('in');var wot=_wot[0];var setWot=_wot[1];
-var _som=useState([]);var somatic=_som[0];var setSomatic=_som[1];var _rsd=useState(0);var rsd=_rsd[0];var setRsd=_rsd[1];
-var _dis=useState(0);var dissoc=_dis[0];var setDissoc=_dis[1];var _sh=useState(0);var selfHarm=_sh[0];var setSelfHarm=_sh[1];
-var _sk=useState([]);var skills=_sk[0];var setSkills=_sk[1];var _n=useState('');var note=_n[0];var setNote=_n[1];
-function toggleSkill(s){skills.indexOf(s)>=0?setSkills(skills.filter(function(x){return x!==s})):setSkills(skills.concat(s))}
-function saveCI(){var ci={id:uid(),date:today(),time:now(),mood:mood,energy:energy,emotion:emotion,emotionIntensity:intensity,autonomicState:autonomic,windowOfTolerance:wot,somaticMarkers:somatic,rsdLevel:rsd,dissociation:dissoc,selfHarmUrge:selfHarm,dbtSkillsUsed:skills,note:note};updateStore(function(s){s.checkIns=[ci].concat(s.checkIns)});setMode(null);setStep(0)}
-var QUICK=['Core','Emotion','Notes'];var FULL=['Core','Emotion','Nervous System','Body','ADHD/BPD','DBT Skills','Notes'];
-var steps2=mode==='quick'?QUICK:FULL;function es(){return mode==='quick'?[0,1,6][step]:step}
-var recent=store.checkIns.slice(0,10);
-if(!mode)return h('div',{className:'fade-in'},h('div',{className:'card-header'},h('div',null,h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1.2rem'}},'Check In'),h('div',{style:{fontSize:'0.62rem',color:'var(--text-muted)'}},'How are you right now?'))),h('div',{className:'grid-2',style:{marginBottom:16}},h('div',{className:'card',style:{cursor:'pointer',textAlign:'center',padding:'20px 16px'},onClick:function(){setMode('quick');setStep(0)}},h('div',{style:{fontSize:'1.4rem',marginBottom:4}},'\u26A1'),h('div',{style:{fontSize:'0.78rem',fontWeight:700}},'Quick'),h('div',{style:{fontSize:'0.56rem',color:'var(--text-muted)'}},'30 seconds')),h('div',{className:'card',style:{cursor:'pointer',textAlign:'center',padding:'20px 16px'},onClick:function(){setMode('full');setStep(0)}},h('div',{style:{fontSize:'1.4rem',marginBottom:4}},'\uD83E\uDDE0'),h('div',{style:{fontSize:'0.78rem',fontWeight:700}},'Full'),h('div',{style:{fontSize:'0.56rem',color:'var(--text-muted)'}},'NS, body, RSD, DBT'))),recent.length>0&&h('div',{className:'card'},h('div',{className:'card-title'},'Recent'),recent.map(function(ci){var st=AUTONOMIC_STATES.find(function(s){return s.id===ci.autonomicState});return h('div',{key:ci.id,style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'5px 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.64rem'}},h('div',{style:{display:'flex',gap:6}},h('span',{style:{color:'var(--text-muted)'}},dayLabel(ci.date)),h('span',{style:{color:'var(--text-muted)'}},timeLabel(ci.time))),h('div',{style:{display:'flex',gap:6,alignItems:'center'}},h('span',null,'M:',h('strong',null,ci.mood)),ci.emotion&&h('span',{style:{color:'var(--text-muted)'}},ci.emotion),st&&h(NSBadge,{state:ci.autonomicState})))})));
-function renderStep(){var e=es();if(e===0)return h('div',null,h(Slider,{label:'Mood',value:mood,onChange:setMood,max:10}),h(Slider,{label:'Energy',value:energy,onChange:setEnergy,color:'var(--green)',max:10}));if(e===1)return h('div',null,h('div',{style:{fontSize:'0.68rem',color:'var(--text-secondary)',marginBottom:8}},'What are you feeling?'),h(EmotionPicker,{value:emotion,onChange:setEmotion}),emotion&&h('div',{style:{marginTop:10}},h(Slider,{label:'Intensity',value:intensity,onChange:setIntensity,color:'var(--pink)',max:10})));if(e===2)return h('div',null,h('div',{style:{fontSize:'0.68rem',color:'var(--text-secondary)',marginBottom:8}},'Autonomic ladder'),h(PolyvagalLadder,{value:autonomic,onChange:setAutonomic}),h('div',{style:{marginTop:10,fontSize:'0.68rem',color:'var(--text-secondary)',marginBottom:6}},'Window of Tolerance'),h(WindowIndicator,{value:wot,onChange:setWot}));if(e===3)return h('div',null,h('div',{style:{fontSize:'0.68rem',color:'var(--text-secondary)',marginBottom:8}},'Body sensations'),h(SomaticPicker,{autonomicState:autonomic,value:somatic,onChange:setSomatic}));if(e===4)return h('div',null,h(Slider,{label:'Rejection Sensitivity',value:rsd,onChange:setRsd,color:'var(--pink)',max:4}),h('div',{style:{fontSize:'0.54rem',color:'var(--text-muted)',marginBottom:8,marginTop:-2}},(RSD_LEVELS.find(function(l){return l.val===rsd})||{}).desc),h(Slider,{label:'Dissociation',value:dissoc,onChange:setDissoc,color:'var(--blue)',max:4}),h(Slider,{label:'Self-Harm Urge',value:selfHarm,onChange:setSelfHarm,color:'var(--red)',max:4}),selfHarm>=2&&h('div',{style:{padding:'8px 12px',background:'var(--red-dim)',border:'1px solid var(--red)',borderRadius:'var(--radius-sm)',marginTop:8,display:'flex',alignItems:'center',gap:8}},h('span',{style:{fontSize:'1rem'}},'\uD83D\uDEA8'),h('span',{style:{fontSize:'0.64rem',color:'var(--red)',flex:1}},'Consider opening your safety plan.'),h('button',{className:'btn-ghost',style:{borderColor:'var(--red)',color:'var(--red)'},onClick:function(){setCrisis(true)}},'Open')));if(e===5)return h('div',null,h('div',{style:{fontSize:'0.68rem',color:'var(--text-secondary)',marginBottom:8}},'DBT skills used?'),DBT_SKILLS.map(function(cat){return h('div',{key:cat.id,style:{marginBottom:8}},h('div',{style:{fontSize:'0.66rem',fontWeight:700,marginBottom:4}},cat.name),h('div',{style:{display:'flex',flexWrap:'wrap',gap:3}},cat.examples.map(function(s){return h('button',{key:s,className:'pill'+(skills.indexOf(s)>=0?' active':''),onClick:function(){toggleSkill(s)}},s)})))}));if(e===6)return h('div',null,h('textarea',{rows:3,placeholder:'Notes, context, reflections...',value:note,onChange:function(ev){setNote(ev.target.value)}}),h('div',{style:{marginTop:10}},h('button',{className:'btn-primary',onClick:saveCI},'Save Check-In')))}
-return h('div',{className:'fade-in'},h('div',{className:'card-header'},h('div',null,h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1rem'}},mode==='quick'?'Quick':'Full',' Check-In'),h('div',{style:{fontSize:'0.58rem',color:'var(--text-muted)'}},steps2[step])),h('button',{className:'btn-ghost',onClick:function(){setMode(null);setStep(0)}},'\u2190')),h('div',{className:'progress-dots'},steps2.map(function(s,i){return h('div',{key:i,style:{background:i<=step?'var(--primary)':'rgba(255,255,255,0.06)'},onClick:function(){setStep(i)}})})),h('div',{className:'card'},renderStep()),h('div',{style:{display:'flex',gap:6,marginTop:8}},step>0&&h('button',{className:'btn-ghost',onClick:function(){setStep(step-1)}},'Prev'),step<steps2.length-1&&h('button',{className:'btn-primary',style:{flex:1},onClick:function(){setStep(step+1)}},'Next: '+steps2[step+1]),step<steps2.length-1&&h('button',{className:'btn-ghost',onClick:function(){setStep(steps2.length-1)}},'Skip')))}
+  /* Shared props for all tabs */
+  var props={store:store,setStore:setStore,setCrisis:setCrisis};
 
-/* === DISCOVER TAB === Sequential guided flow */
-function DiscoverTab(){
-var _d=useState(null);var domain=_d[0];var setDomain=_d[1];var _p=useState(0);var prompt=_p[0];var setPrompt=_p[1];var _t=useState('');var text=_t[0];var setText=_t[1];
-var _view=useState('explore');var view=_view[0];var setView=_view[1];
-var _newMs=useState('');var newMs=_newMs[0];var setNewMs=_newMs[1];var _msCat=useState('insight');var msCat=_msCat[0];var setMsCat=_msCat[1];
-var discoveries=store.discoveries||{};function getDisc(id){return discoveries[id]||{responses:{}}}
-function saveResponse(did,pk,val){updateStore(function(s){if(!s.discoveries)s.discoveries={};if(!s.discoveries[did])s.discoveries[did]={responses:{}};s.discoveries[did].responses[pk]=val;s.discoveries[did].lastUpdated=now()})}
-var completedCount=DISCOVER_DOMAINS.filter(function(d){var disc=getDisc(d.id);return d.prompts.every(function(p){return disc.responses[p.key]&&disc.responses[p.key].trim()})}).length;
-var milestones=(store.milestones||[]).sort(function(a,b){return b.date<a.date?-1:1});
-var msCategories=[{id:'insight',label:'Insight',icon:'\uD83D\uDCA1',color:'var(--amber)'},{id:'growth',label:'Growth',icon:'\uD83C\uDF31',color:'var(--green)'},{id:'challenge',label:'Challenge',icon:'\uD83D\uDD25',color:'var(--red)'},{id:'decision',label:'Decision',icon:'\u2694\uFE0F',color:'var(--purple)'},{id:'connection',label:'Connection',icon:'\u2764\uFE0F',color:'var(--pink)'}];
-function addMilestone(){if(!newMs.trim())return;updateStore(function(s){if(!s.milestones)s.milestones=[];s.milestones.push({id:uid(),text:newMs.trim(),category:msCat,date:today(),created:now()})});setNewMs('')}
-function removeMilestone(id){updateStore(function(s){s.milestones=(s.milestones||[]).filter(function(m){return m.id!==id})})}
-/* Sequential guided domain view - one prompt at a time, full screen feel */
-if(domain){var dom=DISCOVER_DOMAINS.find(function(d){return d.id===domain});var disc=getDisc(domain);var pr=dom.prompts[prompt];var savedText=disc.responses[pr.key]||'';useEffect(function(){setText(savedText)},[domain,prompt]);var totalAnswered=dom.prompts.filter(function(p){return disc.responses[p.key]&&disc.responses[p.key].trim()}).length;
-return h('div',{className:'fade-in'},h('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:12}},h('button',{className:'btn-ghost',onClick:function(){if(text!==savedText)saveResponse(domain,pr.key,text);setDomain(null)}},'\u2190'),h('span',{style:{fontSize:'1.1rem'}},dom.icon),h('span',{style:{fontFamily:'var(--font-heading)',fontSize:'1rem',fontWeight:700}},dom.name),h('span',{style:{fontSize:'0.52rem',color:'var(--text-muted)',marginLeft:'auto'}},(prompt+1)+'/'+dom.prompts.length)),
-/* Progress dots for this domain */
-h('div',{className:'progress-dots',style:{marginBottom:16}},dom.prompts.map(function(p,i){var answered=disc.responses[p.key]&&disc.responses[p.key].trim();return h('div',{key:i,style:{background:i===prompt?dom.color:answered?'var(--green)':'rgba(255,255,255,0.06)'},onClick:function(){if(text!==savedText)saveResponse(domain,pr.key,text);setPrompt(i)}})})),
-/* Single prompt - full focus */
-h('div',{style:{marginBottom:16}},h('div',{style:{fontSize:'0.54rem',fontWeight:700,color:dom.color,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:6}},pr.label),h('div',{style:{fontFamily:'var(--font-heading)',fontSize:'1.05rem',fontWeight:600,lineHeight:1.5,marginBottom:12}},pr.q),h('div',{style:{fontSize:'0.58rem',color:'var(--text-muted)',padding:'8px 12px',background:'rgba(255,255,255,0.02)',borderRadius:'var(--radius-sm)',fontStyle:'italic',marginBottom:12,borderLeft:'3px solid '+dom.color+'40'}},'\uD83D\uDCA1 ',pr.hint),h('textarea',{rows:6,placeholder:'Write freely... this is just for you.',value:text,style:{fontSize:'0.74rem',lineHeight:1.7},onChange:function(e){setText(e.target.value)}})),
-h('div',{style:{display:'flex',gap:6}},prompt>0&&h('button',{className:'btn-ghost',onClick:function(){saveResponse(domain,pr.key,text);setPrompt(prompt-1)}},'\u2190 Prev'),h('button',{className:'btn-primary',style:{flex:1},onClick:function(){saveResponse(domain,pr.key,text);if(prompt<dom.prompts.length-1)setPrompt(prompt+1);else setDomain(null)}},prompt<dom.prompts.length-1?'Save & Next \u2192':'Finish \u2713')))}
-return h('div',{className:'fade-in'},h('div',{className:'card-header'},h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1.1rem'}},'Discover')),h('div',{className:'tab-bar',style:{marginBottom:12}},h('button',{className:'tab-btn'+(view==='explore'?' active':''),onClick:function(){setView('explore')}},'Explore'),h('button',{className:'tab-btn'+(view==='journey'?' active':''),onClick:function(){setView('journey')}},'Journey'),h('button',{className:'tab-btn'+(view==='wheel'?' active':''),onClick:function(){setView('wheel')}},'Life Wheel')),
-view==='explore'&&h('div',null,h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}},h('span',{style:{fontSize:'0.60rem',color:'var(--primary)',fontWeight:700}},completedCount+'/'+DISCOVER_DOMAINS.length),h('div',{style:{flex:1,maxWidth:120,height:4,borderRadius:2,background:'rgba(255,255,255,0.04)',marginLeft:8}},h('div',{style:{height:4,borderRadius:2,background:'var(--primary)',width:(completedCount/DISCOVER_DOMAINS.length*100)+'%'}}))),h('div',{className:'grid-3'},DISCOVER_DOMAINS.map(function(d){var disc=getDisc(d.id);var answered=d.prompts.filter(function(p){return disc.responses[p.key]&&disc.responses[p.key].trim()}).length;var complete=answered===d.prompts.length;return h('div',{key:d.id,className:'card',style:{cursor:'pointer',borderTop:'3px solid '+(complete?'var(--green)':answered?d.color:'var(--border)')},onClick:function(){setDomain(d.id);setPrompt(0)}},h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:3}},h('span',{style:{fontSize:'1rem'}},d.icon),complete?h('span',{style:{fontSize:'0.46rem',color:'var(--green)',fontWeight:700}},'\u2713'):answered?h('span',{style:{fontSize:'0.46rem',color:d.color,fontWeight:600}},answered+'/4'):h('span',{style:{fontSize:'0.46rem',color:'var(--text-muted)'}},'Start')),h('div',{style:{fontSize:'0.66rem',fontWeight:700}},d.name),h('div',{style:{fontSize:'0.48rem',color:'var(--text-muted)'}},d.desc))}))),
-view==='journey'&&h('div',null,h('div',{className:'card'},h('div',{style:{display:'flex',flexWrap:'wrap',gap:4,marginBottom:8}},msCategories.map(function(c){return h('button',{key:c.id,className:'pill'+(msCat===c.id?' active':''),style:msCat===c.id?{background:c.color+'20',borderColor:c.color,color:c.color}:{},onClick:function(){setMsCat(c.id)}},c.icon,' ',c.label)})),h('div',{className:'add-task-row'},h('input',{type:'text',placeholder:'What happened? What did you learn?',value:newMs,onChange:function(e){setNewMs(e.target.value)},onKeyDown:function(e){if(e.key==='Enter')addMilestone()}}),newMs.trim()&&h('button',{className:'add-task-btn',onClick:addMilestone},'Add'))),milestones.length===0?h('div',{style:{textAlign:'center',padding:'24px 0',color:'var(--text-muted)'}},h('div',{style:{fontSize:'1.2rem',marginBottom:6}},'\uD83D\uDCDD'),h('div',{style:{fontSize:'0.70rem'}},'Capture insights, growth moments, and decisions.')):h('div',{style:{position:'relative',paddingLeft:28}},h('div',{style:{position:'absolute',left:15,top:8,bottom:8,width:2,background:'var(--border)'}}),milestones.map(function(ms){var cat=msCategories.find(function(c){return c.id===ms.category})||msCategories[0];return h('div',{key:ms.id,style:{display:'flex',gap:10,marginBottom:6,position:'relative'}},h('div',{style:{width:12,height:12,borderRadius:'50%',background:cat.color,border:'2px solid var(--bg)',flexShrink:0,marginTop:10,position:'absolute',left:-22,zIndex:1}}),h('div',{className:'milestone-card',style:{flex:1,borderLeft:'3px solid '+cat.color}},h('div',{style:{display:'flex',justifyContent:'space-between'}},h('div',null,h('div',{style:{display:'flex',gap:4,marginBottom:2}},h('span',{style:{fontSize:'0.50rem',color:cat.color,fontWeight:700}},cat.icon,' ',cat.label.toUpperCase()),h('span',{style:{fontSize:'0.46rem',color:'var(--text-muted)'}},ms.date)),h('div',{style:{fontSize:'0.70rem',lineHeight:1.4}},ms.text)),h('button',{className:'task-delete',onClick:function(e){e.stopPropagation();removeMilestone(ms.id)}},'\u2715'))))}))),
-view==='wheel'&&h('div',null,h('div',{className:'card'},h('div',{className:'card-title'},'\uD83C\uDFAF Life Wheel'),h('div',{style:{fontSize:'0.56rem',color:'var(--text-muted)',marginBottom:8,marginTop:-6}},'Tap any segment to rate'),h(InteractiveWheel,{pillars:DEFAULT_PILLARS,ratings:pillarRatingsObj,size:260,onRate:function(pid,val){updateStore(function(s){var latest=s.pillarRatings&&s.pillarRatings[0];var r={};DEFAULT_PILLARS.forEach(function(p){r[p.id]=p.rating});if(latest&&latest.ratings)Object.keys(latest.ratings).forEach(function(k){r[k]=latest.ratings[k]});r[pid]=val;s.pillarRatings=[{id:uid(),date:today(),ratings:r,created:now()}].concat(s.pillarRatings.slice(latest?1:0))})}}),h('div',{style:{marginTop:10}},DEFAULT_PILLARS.map(function(p){var r=pillarRatingsObj[p.id]||5;return h('div',{key:p.id,style:{display:'flex',alignItems:'center',gap:6,padding:'4px 0',borderBottom:'1px solid var(--border-subtle)'}},h('span',{style:{fontSize:'0.8rem',width:20}},p.icon),h('div',{style:{flex:1}},h('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:2}},h('span',{style:{fontSize:'0.60rem',fontWeight:600,color:'var(--text-secondary)'}},p.name),h('span',{style:{fontSize:'0.64rem',fontWeight:700,color:p.color}},r)),h('div',{style:{height:3,borderRadius:2,background:'rgba(255,255,255,0.04)'}},h('div',{style:{height:3,borderRadius:2,background:p.color,width:r*10+'%',transition:'width 0.2s'}}))))})))))}
+  /* Today's check-ins */
+  var todayKey=today();
+  var todayCheckins=store.checkIns.filter(function(c){return c.createdAt&&c.createdAt.slice(0,10)===todayKey});
+  var hasMorning=todayCheckins.some(function(c){return c.type==='morning'});
+  var hasEvening=todayCheckins.some(function(c){return c.type==='evening'});
+  var tod=timeOfDay();
 
-/* === PATTERNS TAB === */
-function PatternsTab(){
-var _wo=useState(0);var weekOff=_wo[0];var setWeekOff=_wo[1];
-var ciMood=store.checkIns.slice(0,14).map(function(c){return c.mood}).reverse();
-var ciEnergy=store.checkIns.slice(0,14).map(function(c){return c.energy||5}).reverse();
-var base=new Date();base.setDate(base.getDate()-base.getDay()-(weekOff*7));var days=[];
-for(var i=0;i<7;i++){var d=new Date(base);d.setDate(d.getDate()+i);var iso=d.toISOString().slice(0,10);var dayCIs=store.checkIns.filter(function(c){return c.date===iso});days.push({date:iso,label:d.toLocaleDateString('en-US',{weekday:'short'}),checkIns:dayCIs})}
-function moodColor(m){return m>=7?'var(--green)':m>=4?'var(--amber)':'var(--red)'}
-/* Weekly review summary */
-var weekDays=Object.keys(store.days||{}).filter(function(k){var d=new Date(k+'T12:00:00');var diff=(new Date()-d)/(1000*60*60*24);return diff>=0&&diff<7}).sort();
-var weekMoods=weekDays.filter(function(k){return store.days[k].mood!=null}).map(function(k){return store.days[k].mood});
-var avgMood=weekMoods.length?Math.round(weekMoods.reduce(function(a,b){return a+b},0)/weekMoods.length*10)/10:null;
-var exCount=weekDays.filter(function(k){return store.days[k].exercised}).length;
-var routineCount=weekDays.filter(function(k){return store.days[k].morning_done}).length;
-return h('div',{className:'fade-in'},h('div',{className:'card-header'},h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1.1rem'}},'Patterns'),h('div',{style:{display:'flex',gap:4}},h('button',{className:'btn-ghost',onClick:function(){setWeekOff(weekOff+1)}},'\u2190'),h('button',{className:'btn-ghost',onClick:function(){setWeekOff(0)}},'Now'),weekOff>0&&h('button',{className:'btn-ghost',onClick:function(){setWeekOff(weekOff-1)}},'\u2192'))),
-/* Weekly summary card */
-avgMood!==null&&h('div',{className:'card',style:{borderLeft:'3px solid var(--accent)'}},h('div',{style:{fontSize:'0.52rem',fontWeight:700,color:'var(--accent)',textTransform:'uppercase',letterSpacing:'1px',marginBottom:6}},'Week Summary'),h('div',{style:{display:'flex',gap:12}},h('div',null,h('div',{style:{fontSize:'1.1rem',fontWeight:800,color:avgMood>=7?'var(--green)':avgMood>=4?'var(--accent)':'var(--red)'}},avgMood),h('div',{style:{fontSize:'0.48rem',color:'var(--text-muted)'}},'avg mood')),h('div',null,h('div',{style:{fontSize:'1.1rem',fontWeight:800}},exCount),h('div',{style:{fontSize:'0.48rem',color:'var(--text-muted)'}},'exercise days')),h('div',null,h('div',{style:{fontSize:'1.1rem',fontWeight:800}},routineCount),h('div',{style:{fontSize:'0.48rem',color:'var(--text-muted)'}},'routines')))),
-/* Insights */
-insights.length>0&&h('div',{style:{marginBottom:10}},insights.map(function(ins,i){return h('div',{key:i,className:'insight-card'},h('span',{className:'insight-icon'},ins.icon),h('span',{className:'insight-text'},ins.text))})),
-h('div',{style:{display:'flex',gap:8,marginBottom:10}},h('div',{className:'stat-card',style:{flex:1}},h('div',{className:'stat-label'},'Mood Trend'),h('div',{style:{display:'flex',justifyContent:'center'}},h(Sparkline,{data:ciMood,color:'var(--primary)',width:110,height:28}))),h('div',{className:'stat-card',style:{flex:1}},h('div',{className:'stat-label'},'Energy Trend'),h('div',{style:{display:'flex',justifyContent:'center'}},h(Sparkline,{data:ciEnergy,color:'var(--green)',width:110,height:28})))),
-h('div',{className:'card'},h('div',{className:'card-title'},'Mood'),h('div',{style:{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:6}},days.map(function(d){var avg=d.checkIns.length?Math.round(d.checkIns.reduce(function(s,c){return s+c.mood},0)/d.checkIns.length):null;return h('div',{key:d.date,style:{textAlign:'center'}},h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',marginBottom:3}},d.label),h('div',{style:{width:32,height:32,borderRadius:6,background:avg?moodColor(avg):'rgba(255,255,255,0.03)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto',fontSize:'0.66rem',fontWeight:700,color:avg?'var(--bg)':'var(--text-muted)'}},avg||'\u00B7'))}))),
-h('div',{className:'card'},h('div',{className:'card-title'},'Nervous System'),h('div',{style:{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:6}},days.map(function(d){var lci=d.checkIns[0];var ns=lci?lci.autonomicState:null;var st=ns?AUTONOMIC_STATES.find(function(x){return x.id===ns}):null;return h('div',{key:d.date+'ns',style:{textAlign:'center'}},h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',marginBottom:3}},d.label),h('div',{style:{width:32,height:32,borderRadius:6,background:st?st.dimColor:'rgba(255,255,255,0.03)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto',fontSize:'0.78rem'}},st?st.icon:'\u00B7'))}))))}
+  /* Mode badge */
+  var latestEnergy=todayCheckins.length?todayCheckins[todayCheckins.length-1].energy:3;
+  var modeLabel=latestEnergy<=1?'Survival':latestEnergy<=2?'Low Energy':'';
 
-/* === TASKS TAB === */
-function TasksTab(){
-var _tt=useState('active');var taskTab=_tt[0];var setTaskTab=_tt[1];
-var _nt=useState('');var newTask=_nt[0];var setNewTask=_nt[1];
-function handleAdd(){if(!newTask.trim())return;addTask(newTask.trim(),taskTab==='someday'?'someday':taskTab==='waiting'?'waiting':'active');setNewTask('')}
-var visTasks=taskTab==='active'?activeTasks:taskTab==='waiting'?waitingTasks:taskTab==='done'?allTasks.filter(function(t){return t.done}).slice(0,20):somedayTasks;
-return h('div',{className:'fade-in'},h('div',{className:'card-header'},h('h1',{style:{fontFamily:'var(--font-heading)',fontSize:'1.1rem'}},'Backlog')),h('div',{className:'card'},h('div',{className:'tab-bar'},h('button',{className:'tab-btn'+(taskTab==='active'?' active':''),onClick:function(){setTaskTab('active')}},'Active (',activeTasks.length,')'),h('button',{className:'tab-btn'+(taskTab==='waiting'?' active':''),onClick:function(){setTaskTab('waiting')}},'Wait (',waitingTasks.length,')'),h('button',{className:'tab-btn'+(taskTab==='someday'?' active':''),onClick:function(){setTaskTab('someday')}},'Later'),h('button',{className:'tab-btn'+(taskTab==='done'?' active':''),onClick:function(){setTaskTab('done')}},'Done')),visTasks.length===0?h('div',{style:{fontSize:'0.66rem',color:'var(--text-muted)',padding:'12px 0',textAlign:'center'}},taskTab==='done'?'Nothing yet':'All clear!'):visTasks.sort(function(a,b){return(a.priority||2)-(b.priority||2)}).map(function(t){var assigned=isAssignedToday(t.id);return h('div',{key:t.id,className:'task-item'},h('div',{className:'task-check'+(t.done?' done':''),onClick:function(){toggleTask(t.id)}},t.done?'\u2713':''),h('div',{className:'task-content'},h('div',{className:'task-title'+(t.done?' done':'')},t.text),h('div',{style:{display:'flex',gap:4,alignItems:'center',marginTop:2}},t.meta&&h('span',{className:'task-meta'},t.meta),t.category==='waiting'&&h('span',{className:'waiting-badge'},'Wait'),t.priority===1&&!t.done&&h('span',{style:{fontSize:'0.46rem',padding:'1px 5px',borderRadius:8,background:'var(--red-dim)',color:'var(--red)',fontWeight:600}},'!'),!t.done&&h('button',{className:'assign-btn'+(assigned?' assigned':''),style:{marginLeft:4},onClick:function(e){e.stopPropagation();assignToday(t.id)}},assigned?'\u2713 Today':'+Today'))),h('button',{className:'task-delete',onClick:function(){removeTask(t.id)}},'\u2715'))}),taskTab!=='done'&&h('div',{className:'add-task-row'},h('input',{type:'text',placeholder:'+ Add task...',value:newTask,onChange:function(e){setNewTask(e.target.value)},onKeyDown:function(e){if(e.key==='Enter')handleAdd()}}),newTask.trim()&&h('button',{className:'add-task-btn',onClick:handleAdd},'Add'))))}
+  if(crisis)return h(CrisisOverlay,{plan:store.safetyPlan||DEFAULT_SAFETY,onClose:function(){setCrisis(false)}});
 
-/* Export / Import */
-function exportData(){var d=JSON.parse(JSON.stringify(store));var blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='life-os-backup-'+todayKey+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
-function importData(){var input=document.createElement('input');input.type='file';input.accept='.json';input.onchange=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(d.days||d.tasks||d.checkIns){save(d);setStore(d);setShowSettings(false);alert('Data restored successfully!')}else{alert('Invalid backup file.')}}catch(err){alert('Could not read file: '+err.message)}};reader.readAsText(file)};input.click()}
-var _ss=useState(false);var showSettings=_ss[0];var setShowSettings=_ss[1];
-var dataSize=useMemo(function(){try{var s=window.localStorage.getItem(STORE_KEY);return s?Math.round(s.length/1024):0}catch(e){return 0}},[store]);
+  if(showSettings)return h(SettingsView,{store:store,setStore:setStore,onClose:function(){setShowSettings(false)}});
 
-if(crisis)return h(CrisisOverlay,{onClose:function(){setCrisis(false)}});
-if(showSettings)return h('div',{className:'fade-in'},h('div',{className:'top-header'},h('div',null,h('h1',null,'Settings')),h('button',{className:'btn-ghost',onClick:function(){setShowSettings(false)}},'\u2715 Close')),h('div',{className:'main-content'},h('div',{className:'card'},h('div',{className:'card-title'},'\uD83D\uDCBE Data Backup'),h('div',{style:{fontSize:'0.64rem',color:'var(--text-secondary)',marginBottom:12,lineHeight:1.5}},'Your data lives in this browser\'s storage (',dataSize,'KB). Export regularly to protect against clearing browser data or switching devices.'),h('div',{style:{display:'flex',gap:8}},h('button',{className:'btn-primary',style:{flex:1},onClick:exportData},'\u2B07\uFE0F Export Backup'),h('button',{className:'btn-primary',style:{flex:1,background:'var(--purple)'},onClick:importData},'\u2B06\uFE0F Import Backup'))),h('div',{className:'card'},h('div',{className:'card-title'},'\uD83D\uDCF1 Install as App'),h('div',{style:{fontSize:'0.64rem',color:'var(--text-secondary)',lineHeight:1.5}},'For best experience, add to your home screen. In your browser, tap Share (or the menu) then "Add to Home Screen". This gives the app its own icon and more reliable data storage.')),h('div',{className:'card'},h('div',{className:'card-title'},'\u2139\uFE0F About'),h('div',{style:{fontSize:'0.62rem',color:'var(--text-muted)',lineHeight:1.6}},'Life OS v3.1',h('br',null),'All data stored locally on this device.',h('br',null),'No accounts. No servers. No tracking.',h('br',null),'Built for ADHD + BPD self-management.',h('br',null),h('br',null),'Dr. Cory Dugan'))));
-var tabs={daily:DailyTab,regulate:RegulateTab,discover:DiscoverTab,patterns:PatternsTab,tasks:TasksTab};var CT=tabs[tab]||DailyTab;
-return h('div',null,h('div',{className:'top-header'},h('div',null,h('h1',null,'Life OS'),h('div',{className:'date'},formatDate(todayKey))),h('div',{style:{display:'flex',gap:6,alignItems:'center'}},consistency>0&&h('span',{style:{fontSize:'0.56rem',fontWeight:700,color:'var(--primary)',background:'var(--primary-dim)',padding:'3px 8px',borderRadius:12}},consistency+'/14d'),doneTodayCount>0&&h('span',{style:{fontSize:'0.56rem',color:'var(--green)',fontWeight:600}},doneTodayCount+'\u2713'),h('button',{className:'btn-ghost',style:{padding:'5px 8px',fontSize:'0.72rem'},onClick:function(){setShowSettings(true)}},'\u2699\uFE0F'),h('button',{className:'crisis-btn',onClick:function(){setCrisis(true)}},'\uD83D\uDEA8'))),h('div',{className:'main-content'},h(CT,null)),h('div',{style:{textAlign:'center',padding:'8px 0 80px',fontSize:'0.48rem',color:'var(--text-muted)'}},'Life OS v3.1 \u00B7 Local'),h('div',{className:'bottom-tabs'},[{id:'daily',icon:'\uD83D\uDCCB',label:'Daily'},{id:'regulate',icon:'\uD83E\uDDE0',label:'Regulate'},{id:'discover',icon:'\uD83C\uDF31',label:'Discover'},{id:'patterns',icon:'\uD83D\uDCCA',label:'Patterns'},{id:'tasks',icon:'\u2705',label:'Tasks'}].map(function(t){return h('button',{key:t.id,className:tab===t.id?'active':'',onClick:function(){setTab(t.id)}},h('span',{className:'tab-icon'},t.icon),t.label)})))}
-ReactDOM.render(h(App,null),document.getElementById('root'));
-if('serviceWorker' in navigator){var sw='self.addEventListener("install",function(e){self.skipWaiting()});self.addEventListener("activate",function(e){e.waitUntil(clients.claim())});self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})';navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){})}
+  var tabs={daily:DailyTab,regulate:RegulateTab,discover:DiscoverTab,patterns:PatternsTab,tasks:TasksTab};
+  var CT=tabs[tab]||DailyTab;
+
+  return h('div',null,
+    /* Top bar */
+    h('div',{className:'top-bar'},
+      h('div',null,
+        h('h1',null,'Life OS'),
+        h('div',{className:'sub'},relDay(todayKey))
+      ),
+      h('div',{className:'top-actions'},
+        modeLabel&&h('span',{className:'mode-badge',style:{background:latestEnergy<=1?'var(--red-dim)':'var(--orange-dim)',color:latestEnergy<=1?'var(--red)':'var(--orange)'}},modeLabel),
+        h('button',{className:'btn-s',style:{padding:'5px 8px',fontSize:'0.72rem'},onClick:function(){setShowSettings(true)}},'\u2699\uFE0F'),
+        h('button',{className:'btn-s btn-danger',style:{padding:'5px 10px'},onClick:function(){setCrisis(true)}},'\uD83D\uDEA8 Safety')
+      )
+    ),
+    /* Main content */
+    h('div',{className:'main'},h(CT,props)),
+    /* Bottom nav */
+    h('div',{className:'nav'},
+      [{id:'daily',ico:'\uD83D\uDCCB',l:'Daily'},
+       {id:'regulate',ico:'\uD83E\uDDE0',l:'Regulate'},
+       {id:'discover',ico:'\uD83C\uDF31',l:'Discover'},
+       {id:'patterns',ico:'\uD83D\uDCCA',l:'Patterns'},
+       {id:'tasks',ico:'\u2705',l:'Tasks'}].map(function(t){
+        return h('button',{key:t.id,className:tab===t.id?'on':'',onClick:function(){setTab(t.id)}},
+          h('span',{className:'ico'},t.ico),t.l)
+      })
+    )
+  );
+}
+
+/* ===== SHARED COMPONENTS ===== */
+function Slider(p){
+  return h('div',{style:{marginBottom:8}},
+    h('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:3}},
+      h('span',{style:{fontSize:'0.60rem',color:'var(--text-sec)'}},p.label),
+      h('span',{style:{fontSize:'0.66rem',fontWeight:700,color:p.color||'var(--teal)'}},p.value)
+    ),
+    h('input',{type:'range',min:p.min||1,max:p.max||5,step:1,value:p.value,
+      style:{'--thumb':p.color||'var(--teal)'},
+      onChange:function(e){p.onChange(parseInt(e.target.value))}})
+  );
+}
+
+function MoodPicker(p){
+  return h('div',{className:'face-row'},MOODS.map(function(m){
+    return h('button',{key:m.v,className:'face-btn'+(p.value===m.v?' on pop':''),
+      onClick:function(){p.onChange(m.v)},title:m.l},m.e);
+  }));
+}
+
+function StatePicker(p){
+  return h('div',{className:'g5'},NS_STATES.map(function(s){
+    return h('div',{key:s.id,className:'state-btn'+(p.value===s.id?' on':''),
+      style:p.value===s.id?{borderColor:s.color,color:s.color}:{},
+      onClick:function(){p.onChange(s.id)}},
+      h('div',{className:'sico'},s.icon),
+      h('div',{className:'slbl',style:p.value===s.id?{color:s.color}:{}},s.label)
+    );
+  }));
+}
+
+function PillarBadge(p){
+  var pl=pillar(p.id);
+  return h('span',{style:{fontSize:'0.48rem',padding:'2px 7px',borderRadius:10,background:pl.dim,color:pl.color,fontWeight:600}},pl.icon,' ',pl.label);
+}
+
+function Sparkline(p){
+  var data=p.data||[];if(data.length<2)return null;
+  var w=p.width||80;var ht=p.height||22;
+  var mn=Math.min.apply(null,data);var mx=Math.max.apply(null,data);var range=mx-mn||1;
+  var pts=data.map(function(v,i){return(i/(data.length-1))*w+','+(ht-2-((v-mn)/range)*(ht-4))}).join(' ');
+  return h('svg',{width:w,height:ht,className:'spark'},
+    h('polyline',{points:pts,fill:'none',stroke:p.color||'var(--teal)',strokeWidth:1.5,strokeLinecap:'round'}));
+}
+
+/* Life Wheel SVG (interactive) */
+function WheelChart(p){
+  var size=p.size||240;var cx=size/2;var cy=size/2;var maxR=size/2-20;
+  var ratings=p.ratings||{};
+  var n=PILLARS.length;var angleStep=2*Math.PI/n;var startAngle=-Math.PI/2;
+
+  /* Build polygon points for current ratings */
+  var polyPts=PILLARS.map(function(pl,i){
+    var angle=startAngle+i*angleStep;
+    var r=(ratings[pl.id]||5)/10*maxR;
+    return(cx+r*Math.cos(angle))+','+(cy+r*Math.sin(angle));
+  }).join(' ');
+
+  /* Grid circles */
+  var circles=[2,4,6,8,10].map(function(v){
+    return h('circle',{key:v,cx:cx,cy:cy,r:v/10*maxR,fill:'none',stroke:'rgba(255,255,255,0.04)',strokeWidth:1});
+  });
+
+  /* Axis lines + labels */
+  var axes=PILLARS.map(function(pl,i){
+    var angle=startAngle+i*angleStep;
+    var lx=cx+(maxR+14)*Math.cos(angle);
+    var ly=cy+(maxR+14)*Math.sin(angle);
+    return h('g',{key:pl.id},
+      h('line',{x1:cx,y1:cy,x2:cx+maxR*Math.cos(angle),y2:cy+maxR*Math.sin(angle),stroke:'rgba(255,255,255,0.04)',strokeWidth:1}),
+      h('text',{x:lx,y:ly,textAnchor:'middle',dominantBaseline:'middle',fill:pl.color,fontSize:9,fontWeight:600,fontFamily:'DM Sans'},pl.icon)
+    );
+  });
+
+  /* Interactive dots */
+  var dots=PILLARS.map(function(pl,i){
+    var angle=startAngle+i*angleStep;
+    var r=(ratings[pl.id]||5)/10*maxR;
+    return h('circle',{key:pl.id+'d',cx:cx+r*Math.cos(angle),cy:cy+r*Math.sin(angle),r:6,fill:pl.color,stroke:'var(--bg)',strokeWidth:2,style:{cursor:'pointer'},
+      onClick:function(){if(p.onSelect)p.onSelect(pl.id)}});
+  });
+
+  return h('svg',{width:size,height:size,viewBox:'0 0 '+size+' '+size,style:{display:'block',margin:'0 auto'}},
+    circles,axes,
+    h('polygon',{points:polyPts,fill:'rgba(45,212,191,0.08)',stroke:'var(--teal)',strokeWidth:1.5}),
+    dots
+  );
+}
+
+/* ===== DAILY TAB ===== */
+function DailyTab(p){
+  var store=p.store;var setStore=p.setStore;
+  var todayKey=today();var tod=timeOfDay();
+  var todayCIs=store.checkIns.filter(function(c){return c.createdAt&&c.createdAt.slice(0,10)===todayKey});
+  var hasMorning=todayCIs.some(function(c){return c.type==='morning'});
+  var hasEvening=todayCIs.some(function(c){return c.type==='evening'});
+
+  /* State for current check-in form */
+  var _mode=useState(null);var mode=_mode[0];var setMode=_mode[1];
+  var _mood=useState(3);var mood=_mood[0];var setMood=_mood[1];
+  var _energy=useState(3);var energy=_energy[0];var setEnergy=_energy[1];
+  var _ns=useState('calm');var ns=_ns[0];var setNs=_ns[1];
+  var _sleep=useState('');var sleepH=_sleep[0];var setSleepH=_sleep[1];
+  var _sleepQ=useState('');var sleepQ=_sleepQ[0];var setSleepQ=_sleepQ[1];
+  var _weight=useState('');var weight=_weight[0];var setWeight=_weight[1];
+  var _intent=useState('');var intent=_intent[0];var setIntent=_intent[1];
+  var _note=useState('');var note=_note[0];var setNote=_note[1];
+  var _risk=useState('none');var risk=_risk[0];var setRisk=_risk[1];
+  var _exer=useState(false);var exercised=_exer[0];var setExercised=_exer[1];
+  var _peak=useState(false);var peakStress=_peak[0];var setPeakStress=_peak[1];
+  var _helped=useState([]);var helped=_helped[0];var setHelped=_helped[1];
+  var _drained=useState([]);var drained=_drained[0];var setDrained=_drained[1];
+
+  /* Presets for intention */
+  var intentPresets=['Gentle day','Protect energy','One thing only','Show up','Be present'];
+  /* Presets for helped/drained */
+  var helpedOpts=['Exercise','Good sleep','Connection','Nature','Music','Boundaries','Structure'];
+  var drainedOpts=['Meetings','Conflict','Overwork','Sensory overload','Isolation','Poor sleep','Decision fatigue'];
+
+  function toggleArr(arr,setArr,val){
+    arr.indexOf(val)>=0?setArr(arr.filter(function(x){return x!==val})):setArr(arr.concat(val));
+  }
+
+  function saveMorning(){
+    var ci={id:uid(),type:'morning',createdAt:nowISO(),mood:mood,energy:energy,nsState:ns,sleepQuality:sleepQ||'OK',sleepHrs:parseFloat(sleepH)||0,weight:parseFloat(weight)||0,intention:intent,risk:risk,tags:[]};
+    setStore(function(s){s.checkIns.push(ci);return s});
+    setMode(null);
+  }
+
+  function saveEvening(){
+    var ci={id:uid(),type:'evening',createdAt:nowISO(),mood:mood,energy:energy,nsState:ns,exercised:exercised,peakStress:peakStress,helped:helped,drained:drained,note:note,tags:[]};
+    setStore(function(s){s.checkIns.push(ci);return s});
+    setMode(null);
+  }
+
+  /* Today's tasks */
+  var todayTasks=(store.tasks||[]).filter(function(t){return t.status==='today'||t.todayDate===todayKey});
+  var doneTodayCount=todayTasks.filter(function(t){return t.status==='done'}).length;
+
+  /* Recent mood sparkline */
+  var last14=store.checkIns.filter(function(c){return c.mood!=null}).slice(-14).map(function(c){return c.mood});
+
+  /* ===== CHECK-IN FORM (morning or evening) ===== */
+  if(mode==='morning'){
+    return h('div',{className:'fi'},
+      h('div',{className:'card-hdr'},
+        h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\u2600\uFE0F Morning Check-in'),
+        h('button',{className:'btn-s',onClick:function(){setMode(null)}},'\u2715')
+      ),
+      /* Mood */
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6,textAlign:'center'}},'How are you feeling?'),
+        h(MoodPicker,{value:mood,onChange:setMood})
+      ),
+      /* Energy */
+      h('div',{className:'card'},h(Slider,{label:'Energy',value:energy,max:5,onChange:setEnergy,color:'var(--green)'})),
+      /* NS State */
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:8}},'Nervous system right now?'),
+        h(StatePicker,{value:ns,onChange:setNs})
+      ),
+      /* Sleep + Weight (compact) */
+      h('div',{className:'card'},
+        h('div',{className:'g3'},
+          h('div',null,
+            h('label',{style:{fontSize:'0.50rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Sleep hrs'),
+            h('input',{type:'number',step:'0.5',placeholder:'7',value:sleepH,style:{textAlign:'center'},onChange:function(e){setSleepH(e.target.value)}})
+          ),
+          h('div',null,
+            h('label',{style:{fontSize:'0.50rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Quality'),
+            h('div',{style:{display:'flex',gap:3}},['Bad','OK','Good'].map(function(q){
+              return h('button',{key:q,className:'pill'+(sleepQ===q?' on':''),style:{flex:1,justifyContent:'center',padding:'5px 0'},onClick:function(){setSleepQ(q)}},q);
+            }))
+          ),
+          h('div',null,
+            h('label',{style:{fontSize:'0.50rem',color:'var(--text-muted)',display:'block',marginBottom:2}},'Weight'),
+            h('input',{type:'number',step:'0.1',placeholder:'kg',value:weight,style:{textAlign:'center'},onChange:function(e){setWeight(e.target.value)}})
+          )
+        )
+      ),
+      /* Intention */
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6}},'Today\'s intention'),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4,marginBottom:6}},intentPresets.map(function(ip){
+          return h('button',{key:ip,className:'pill'+(intent===ip?' on':''),onClick:function(){setIntent(intent===ip?'':ip)}},ip);
+        })),
+        h('input',{type:'text',placeholder:'Or write your own...',value:intentPresets.indexOf(intent)>=0?'':intent,onChange:function(e){setIntent(e.target.value)}})
+      ),
+      /* Risk */
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6}},'Anything risky today?'),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},['none','work stress','relationship','health','money'].map(function(r){
+          return h('button',{key:r,className:'pill'+(risk===r?' on':''),onClick:function(){setRisk(r)}},r==='none'?'Nothing specific':r);
+        }))
+      ),
+      h('button',{className:'btn',style:{marginTop:8},onClick:saveMorning},'Done \u2713')
+    );
+  }
+
+  if(mode==='evening'){
+    return h('div',{className:'fi'},
+      h('div',{className:'card-hdr'},
+        h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\uD83C\uDF1A Evening Wrap-up'),
+        h('button',{className:'btn-s',onClick:function(){setMode(null)}},'\u2715')
+      ),
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6,textAlign:'center'}},'Overall day?'),
+        h(MoodPicker,{value:mood,onChange:setMood})
+      ),
+      h('div',{className:'card'},h(Slider,{label:'Energy',value:energy,max:5,onChange:setEnergy,color:'var(--green)'})),
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6}},'Peak stress moment?'),
+        h('div',{className:'g2'},
+          h('div',{className:'chk'+(peakStress?' on':''),onClick:function(){setPeakStress(true)}},h('div',{className:'chk-box'},peakStress?'\u2713':''),h('div',{className:'chk-txt'},'Yes')),
+          h('div',{className:'chk'+(!peakStress?' on':''),onClick:function(){setPeakStress(false)}},h('div',{className:'chk-box'},!peakStress?'\u2713':''),h('div',{className:'chk-txt'},'No'))
+        )
+      ),
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6}},'What helped today?'),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},helpedOpts.map(function(o){
+          return h('button',{key:o,className:'pill'+(helped.indexOf(o)>=0?' on':''),onClick:function(){toggleArr(helped,setHelped,o)}},o);
+        }))
+      ),
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:6}},'What drained you?'),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},drainedOpts.map(function(o){
+          return h('button',{key:o,className:'pill'+(drained.indexOf(o)>=0?' on':''),onClick:function(){toggleArr(drained,setDrained,o)}},o);
+        }))
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'g2'},
+          h('div',{className:'chk'+(exercised?' on':''),onClick:function(){setExercised(!exercised)}},h('div',{className:'chk-box'},exercised?'\u2713':''),h('div',{className:'chk-txt'},'Exercised'))
+        )
+      ),
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.60rem',color:'var(--text-sec)',marginBottom:4}},'Win, gratitude, or reflection'),
+        h('textarea',{rows:2,placeholder:'One good thing...',value:note,onChange:function(e){setNote(e.target.value)}})
+      ),
+      h('button',{className:'btn',style:{marginTop:8},onClick:saveEvening},'Done \u2713')
+    );
+  }
+
+  /* ===== DAILY HOME VIEW ===== */
+  var checkInLabel=!hasMorning?'\u2600\uFE0F Morning Check-in':!hasEvening?'\uD83C\uDF1A Evening Wrap-up':'\u2713 All checked in';
+  var checkInAction=!hasMorning?function(){setMode('morning')}:!hasEvening?function(){setMode('evening')}:null;
+  var allDone=hasMorning&&hasEvening;
+
+  return h('div',{className:'fi'},
+    /* Main check-in button */
+    !allDone&&h('button',{className:'btn',style:{marginBottom:12,fontSize:'0.78rem',padding:'14px 20px'},onClick:checkInAction},checkInLabel),
+    allDone&&h('div',{className:'card',style:{textAlign:'center',borderColor:'rgba(45,212,191,0.2)'}},
+      h('div',{style:{fontSize:'1.2rem',marginBottom:2}},'\u2713'),
+      h('div',{style:{fontSize:'0.68rem',fontWeight:600,color:'var(--teal)'}},'All checked in today'),
+      h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)',marginTop:2}},'Tap to add another check-in'),
+      h('div',{style:{display:'flex',gap:6,justifyContent:'center',marginTop:8}},
+        h('button',{className:'btn-s',onClick:function(){setMode('morning')}},'\u2600\uFE0F Morning'),
+        h('button',{className:'btn-s',onClick:function(){setMode('evening')}},'\uD83C\uDF1A Evening')
+      )
+    ),
+    /* Quick stats */
+    h('div',{style:{display:'flex',gap:6,marginBottom:10}},
+      h('div',{className:'card',style:{flex:1,textAlign:'center',padding:'8px'}},
+        h('div',{style:{fontSize:'0.46rem',fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px'}},'Mood'),
+        h('div',{style:{display:'flex',alignItems:'center',justifyContent:'center',gap:4}},
+          h('span',{style:{fontSize:'0.88rem',fontWeight:700}},todayCIs.length?todayCIs[todayCIs.length-1].mood||'--':'--'),
+          last14.length>1&&h(Sparkline,{data:last14,color:'var(--teal)',width:40,height:16})
+        )
+      ),
+      h('div',{className:'card',style:{flex:1,textAlign:'center',padding:'8px'}},
+        h('div',{style:{fontSize:'0.46rem',fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px'}},'Energy'),
+        h('span',{style:{fontSize:'0.88rem',fontWeight:700}},todayCIs.length?todayCIs[todayCIs.length-1].energy||'--':'--')
+      ),
+      h('div',{className:'card',style:{flex:1,textAlign:'center',padding:'8px'}},
+        h('div',{style:{fontSize:'0.46rem',fontWeight:700,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:'0.5px'}},'Tasks'),
+        h('span',{style:{fontSize:'0.88rem',fontWeight:700}},doneTodayCount+'/'+todayTasks.length)
+      )
+    ),
+    /* Today's intention (if set) */
+    todayCIs.filter(function(c){return c.intention}).length>0&&
+      h('div',{className:'card',style:{borderLeft:'3px solid var(--amber)',padding:'8px 14px'}},
+        h('div',{style:{fontSize:'0.46rem',fontWeight:700,color:'var(--amber)',textTransform:'uppercase',letterSpacing:'1px',marginBottom:2}},'Intention'),
+        h('div',{style:{fontSize:'0.68rem',lineHeight:1.4}},todayCIs.filter(function(c){return c.intention}).pop().intention)
+      ),
+    /* Today's tasks (top 3) */
+    todayTasks.length>0&&h('div',{className:'card'},
+      h('div',{className:'card-t'},'\uD83C\uDFAF Today\'s Focus'),
+      todayTasks.slice(0,3).map(function(t){
+        return h('div',{key:t.id,className:'tsk'},
+          h('div',{className:'tsk-chk'+(t.status==='done'?' done':''),onClick:function(){
+            setStore(function(s){s.tasks=s.tasks.map(function(x){return x.id===t.id?Object.assign({},x,{status:x.status==='done'?'today':'done',doneDate:x.status==='done'?null:todayKey}):x});return s});
+          }},t.status==='done'?'\u2713':''),
+          h('div',{style:{flex:1}},
+            h('div',{className:'tsk-title'+(t.status==='done'?' done':'')},t.title),
+            t.meta&&h('div',{className:'tsk-meta'},t.meta)
+          )
+        );
+      }),
+      todayTasks.length>3&&h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)',textAlign:'center',paddingTop:4}},
+        '+'+(todayTasks.length-3)+' more')
+    ),
+    /* Recent check-in summary */
+    todayCIs.length>0&&h('div',{className:'card'},
+      h('div',{className:'card-t'},'Today\'s Log'),
+      todayCIs.map(function(ci){
+        var ns2=nsState(ci.nsState);
+        return h('div',{key:ci.id,style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'4px 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.58rem'}},
+          h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+            h('span',{style:{color:'var(--text-muted)'}},timeLabel(ci.createdAt)),
+            h('span',null,ci.type==='morning'?'\u2600\uFE0F':'\uD83C\uDF1A'),
+            h('span',null,MOODS.find(function(m){return m.v===ci.mood})?MOODS.find(function(m){return m.v===ci.mood}).e:'')
+          ),
+          h('span',{style:{fontSize:'0.50rem',padding:'2px 6px',borderRadius:8,background:ns2.dim,color:ns2.color}},ns2.icon,' ',ns2.label)
+        );
+      })
+    )
+  );
+}
+
+/* ===== REGULATE TAB ===== */
+function RegulateTab(p){
+  var store=p.store;var setStore=p.setStore;var setCrisis=p.setCrisis;
+  var _mode=useState(null);var mode=_mode[0];var setMode=_mode[1];
+  var _ns=useState('calm');var ns=_ns[0];var setNs=_ns[1];
+  var _skill=useState(null);var activeSkill=_skill[0];var setActiveSkill=_skill[1];
+  var _step=useState(0);var step=_step[0];var setStep=_step[1];
+  var _breathPhase=useState(null);var breathPhase=_breathPhase[0];var setBreathPhase=_breathPhase[1];
+  var _breathCount=useState(0);var breathCount=_breathCount[0];var setBreathCount=_breathCount[1];
+  var _stateBefore=useState('');var stateBefore=_stateBefore[0];var setStateBefore=_stateBefore[1];
+  var _helpful=useState(3);var helpful=_helpful[0];var setHelpful=_helpful[1];
+
+  /* Recent regulation sessions */
+  var recentSessions=store.regulationSessions?store.regulationSessions.slice(0,8):[];
+
+  /* === BREATHING EXERCISE === */
+  if(mode==='breathing'){
+    var timerRef=useRef(null);
+    var phases=[{label:'Breathe in',dur:4000},{label:'Hold',dur:7000},{label:'Breathe out',dur:8000}];
+    var _bp=useState(0);var bpIdx=_bp[0];var setBpIdx=_bp[1];
+    var _bc=useState(0);var bcycles=_bc[0];var setBcycles=_bc[1];
+    var _running=useState(false);var running=_running[0];var setRunning=_running[1];
+
+    function startBreathing(){
+      setRunning(true);setBpIdx(0);setBcycles(0);
+      runPhase(0,0);
+    }
+    function runPhase(pi,cy){
+      if(cy>=4){setRunning(false);return;}
+      setBpIdx(pi);setBcycles(cy);
+      timerRef.current=setTimeout(function(){
+        var next=pi+1;if(next>=3){next=0;cy++;}
+        runPhase(next,cy);
+      },phases[pi].dur);
+    }
+    function stopBreathing(){clearTimeout(timerRef.current);setRunning(false)}
+
+    return h('div',{className:'fi'},
+      h('div',{className:'card-hdr'},
+        h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\uD83D\uDCA8 Paced Breathing'),
+        h('button',{className:'btn-s',onClick:function(){stopBreathing();setMode(null)}},'\u2190 Back')
+      ),
+      h('div',{style:{textAlign:'center',marginTop:20}},
+        h('div',{className:'breathe-circle',style:{animation:running?(bpIdx===0?'breatheIn 4s ease-in-out':'breatheOut 8s ease-in-out'):'none'}},
+          running?phases[bpIdx].label:'Ready'
+        ),
+        running&&h('div',{style:{fontSize:'0.58rem',color:'var(--text-muted)',marginTop:8}},'Cycle '+(bcycles+1)+' of 4'),
+        h('div',{style:{marginTop:16}},
+          !running?h('button',{className:'btn',style:{maxWidth:200,margin:'0 auto'},onClick:startBreathing},'Start'):
+          h('button',{className:'btn-s',onClick:stopBreathing},'Stop')
+        )
+      )
+    );
+  }
+
+  /* === GUIDED DBT SKILL === */
+  if(activeSkill){
+    var mod=null;var sk=null;
+    DBT_MODULES.forEach(function(m){m.skills.forEach(function(s){if(s.id===activeSkill){mod=m;sk=s}})});
+    if(!sk){setActiveSkill(null);return null;}
+
+    function finishSkill(){
+      var session={id:uid(),createdAt:nowISO(),trigger:[],stateBefore:stateBefore||ns,stateAfter:ns,skillIds:[activeSkill],durationMinutes:Math.round((sk.steps.length*30)/60),helpfulness:helpful};
+      setStore(function(s){if(!s.regulationSessions)s.regulationSessions=[];s.regulationSessions.unshift(session);return s});
+      setActiveSkill(null);setStep(0);setStateBefore('');
+    }
+
+    var isLast=step>=sk.steps.length;
+
+    return h('div',{className:'fi'},
+      h('div',{className:'card-hdr'},
+        h('div',null,
+          h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},mod.icon,' ',sk.name),
+          h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)'}},mod.name)
+        ),
+        h('button',{className:'btn-s',onClick:function(){setActiveSkill(null);setStep(0)}},'\u2190')
+      ),
+      /* Progress */
+      h('div',{className:'pdots'},sk.steps.map(function(_,i){
+        return h('div',{key:i,style:{background:i<step?'var(--teal)':i===step?mod.color:'rgba(255,255,255,0.06)'}});
+      }).concat(h('div',{key:'end',style:{background:isLast?'var(--teal)':'rgba(255,255,255,0.06)'}}))),
+      /* Current step or finish */
+      isLast?h('div',{className:'card',style:{textAlign:'center'}},
+        h('div',{style:{fontSize:'1.2rem',marginBottom:8}},'\u2705'),
+        h('div',{style:{fontFamily:'var(--fh)',fontSize:'0.9rem',fontWeight:600,marginBottom:12}},'How are you now?'),
+        h(StatePicker,{value:ns,onChange:setNs}),
+        h('div',{style:{marginTop:12}},h(Slider,{label:'How helpful was this?',value:helpful,max:5,onChange:setHelpful,color:'var(--amber)'})),
+        h('button',{className:'btn',style:{marginTop:12},onClick:finishSkill},'Save & Close')
+      ):
+      h('div',{className:'card'},
+        h('div',{style:{fontSize:'0.48rem',fontWeight:700,color:mod.color,textTransform:'uppercase',letterSpacing:'1.5px',marginBottom:6}},'Step '+(step+1)+' of '+sk.steps.length),
+        h('div',{style:{fontFamily:'var(--fh)',fontSize:'0.88rem',fontWeight:600,lineHeight:1.6,minHeight:60}},sk.steps[step])
+      ),
+      !isLast&&h('div',{style:{display:'flex',gap:6,marginTop:8}},
+        step>0&&h('button',{className:'btn-s',onClick:function(){setStep(step-1)}},'\u2190 Prev'),
+        h('button',{className:'btn',style:{flex:1},onClick:function(){setStep(step+1)}},step<sk.steps.length-1?'Next \u2192':'Finish'),
+        step<sk.steps.length-2&&h('button',{className:'btn-s',onClick:function(){setStep(sk.steps.length)}},'Skip')
+      )
+    );
+  }
+
+  /* === REGULATE HOME === */
+  return h('div',{className:'fi'},
+    h('div',{className:'card-hdr'},
+      h('div',null,
+        h('h1',{style:{fontFamily:'var(--fh)',fontSize:'1.15rem'}},'Regulate'),
+        h('div',{style:{fontSize:'0.56rem',color:'var(--text-muted)'}},'Where are you right now?')
+      )
+    ),
+    /* State selector */
+    h('div',{className:'card'},h(StatePicker,{value:ns,onChange:function(v){
+      setNs(v);
+      if(v==='unsafe')setCrisis(true);
+    }})),
+    /* State-specific actions */
+    ns!=='unsafe'&&h('div',null,
+      h('div',{className:'slbl'},'Shift your state'),
+      (REG_ACTIONS[ns]||[]).map(function(a){
+        return h('div',{key:a.id,className:'card',style:{cursor:'pointer',display:'flex',alignItems:'center',gap:10,padding:'12px 14px'},
+          onClick:function(){
+            if(a.type==='breathing'){setStateBefore(ns);setMode('breathing')}
+            else if(a.type==='guided'||a.type==='prompt'){/* Could expand later */}
+          }},
+          h('div',{style:{fontSize:'1.1rem'}},a.icon),
+          h('div',{style:{flex:1}},
+            h('div',{style:{fontSize:'0.68rem',fontWeight:600}},a.label),
+            h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)'}},a.dur)
+          ),
+          a.type==='breathing'&&h('span',{style:{fontSize:'0.50rem',color:'var(--teal)',fontWeight:600}},'\u25B6 Start')
+        );
+      })
+    ),
+    /* DBT Skills */
+    h('div',{className:'slbl',style:{marginTop:16}},'DBT Skills'),
+    DBT_MODULES.map(function(mod){
+      return h('div',{key:mod.id,className:'card'},
+        h('div',{className:'card-t',style:{color:mod.color}},mod.icon,' ',mod.name),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},mod.skills.map(function(sk){
+          return h('button',{key:sk.id,className:'pill',
+            style:{borderColor:mod.color+'40'},
+            onClick:function(){setStateBefore(ns);setActiveSkill(sk.id);setStep(0)}},
+            sk.name,' \u2192');
+        }))
+      );
+    }),
+    /* Life Wheel quick check-in */
+    h('div',{className:'slbl',style:{marginTop:16}},'Life Check-in'),
+    h(LifeWheelCheckin,{store:store,setStore:setStore}),
+    /* Recent sessions */
+    recentSessions.length>0&&h('div',null,
+      h('div',{className:'slbl',style:{marginTop:16}},'Recent Sessions'),
+      h('div',{className:'card'},recentSessions.map(function(s){
+        var ns2=nsState(s.stateAfter||'calm');
+        return h('div',{key:s.id,style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'4px 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.56rem'}},
+          h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+            h('span',{style:{color:'var(--text-muted)'}},relDay(s.createdAt?s.createdAt.slice(0,10):'')),
+            h('span',null,(s.skillIds||[]).join(', '))
+          ),
+          h('span',{style:{padding:'2px 6px',borderRadius:8,background:ns2.dim,color:ns2.color,fontSize:'0.48rem'}},ns2.icon,' ',ns2.label)
+        );
+      }))
+    )
+  );
+}
+
+/* Life Wheel Check-in (used in Regulate and Discover) */
+function LifeWheelCheckin(p){
+  var store=p.store;var setStore=p.setStore;
+  var _editing=useState(false);var editing=_editing[0];var setEditing=_editing[1];
+  var _selected=useState(null);var selected=_selected[0];var setSelected=_selected[1];
+
+  /* Get latest snapshot ratings or defaults */
+  var latest=store.wheelSnapshots&&store.wheelSnapshots.length?store.wheelSnapshots[0]:null;
+  var _ratings=useState(function(){
+    var r={};PILLARS.forEach(function(pl){r[pl.id]=latest?latest.ratings[pl.id]||5:5});return r;
+  });
+  var ratings=_ratings[0];var setRatings=_ratings[1];
+  var _note=useState('');var wNote=_note[0];var setWNote=_note[1];
+
+  function saveSnapshot(){
+    var snap={id:uid(),createdAt:nowISO(),ratings:Object.assign({},ratings),notes:wNote,topIssue:''};
+    /* Find lowest pillar */
+    var lowest=null;var lowestVal=11;
+    PILLARS.forEach(function(pl){if((ratings[pl.id]||5)<lowestVal){lowestVal=ratings[pl.id]||5;lowest=pl.id}});
+    snap.topIssue=lowest||'';
+    setStore(function(s){if(!s.wheelSnapshots)s.wheelSnapshots=[];s.wheelSnapshots.unshift(snap);return s});
+    setEditing(false);setWNote('');
+  }
+
+  if(!editing){
+    return h('div',{className:'card',style:{cursor:'pointer'},onClick:function(){setEditing(true)}},
+      h('div',{className:'card-t'},'\uD83C\uDFAF Life Wheel'),
+      latest?h('div',null,
+        h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)',marginBottom:6}},'Last: '+relDay(latest.createdAt?latest.createdAt.slice(0,10):'')),
+        h(WheelChart,{ratings:latest.ratings,size:200}),
+        h('div',{style:{textAlign:'center',marginTop:6}},
+          h('button',{className:'btn-s'},'New Check-in'))
+      ):
+      h('div',{style:{textAlign:'center',padding:'12px 0'}},
+        h('div',{style:{fontSize:'0.68rem',color:'var(--text-muted)',marginBottom:4}},'Rate each area of your life'),
+        h('button',{className:'btn-s'},'Start Check-in'))
+    );
+  }
+
+  return h('div',{className:'card fi'},
+    h('div',{className:'card-hdr'},
+      h('div',{className:'card-t'},'\uD83C\uDFAF Life Wheel Check-in'),
+      h('button',{className:'btn-s',onClick:function(){setEditing(false)}},'\u2715')
+    ),
+    h(WheelChart,{ratings:ratings,size:220,onSelect:function(id){setSelected(selected===id?null:id)}}),
+    /* Pillar sliders */
+    PILLARS.map(function(pl){
+      var isOpen=selected===pl.id;
+      return h('div',{key:pl.id,style:{padding:'6px 0',borderBottom:'1px solid var(--border-subtle)'}},
+        h('div',{style:{display:'flex',alignItems:'center',gap:6,cursor:'pointer'},onClick:function(){setSelected(isOpen?null:pl.id)}},
+          h('span',{style:{fontSize:'0.8rem'}},pl.icon),
+          h('span',{style:{fontSize:'0.60rem',fontWeight:600,color:'var(--text-sec)',flex:1}},pl.label),
+          h('span',{style:{fontSize:'0.66rem',fontWeight:700,color:pl.color}},ratings[pl.id]||5),
+          h('span',{style:{fontSize:'0.50rem',color:'var(--text-muted)'}},isOpen?'\u25B2':'\u25BC')
+        ),
+        isOpen&&h('div',{style:{paddingTop:6}},
+          h('input',{type:'range',min:1,max:10,value:ratings[pl.id]||5,onChange:function(e){
+            var v=parseInt(e.target.value);setRatings(function(r){var n=Object.assign({},r);n[pl.id]=v;return n});
+          }}),
+          h('div',{style:{display:'flex',justifyContent:'space-between',fontSize:'0.46rem',color:'var(--text-muted)'}},
+            h('span',null,'Struggling'),h('span',null,'Thriving'))
+        )
+      );
+    }),
+    h('div',{style:{marginTop:8}},
+      h('textarea',{rows:2,placeholder:'Any notes on this snapshot?',value:wNote,onChange:function(e){setWNote(e.target.value)}})
+    ),
+    h('button',{className:'btn',style:{marginTop:8},onClick:saveSnapshot},'Save Snapshot')
+  );
+}
+
+/* ===== DISCOVER TAB ===== */
+function DiscoverTab(p){
+  var store=p.store;var setStore=p.setStore;
+  var _view=useState('explore');var view=_view[0];var setView=_view[1];
+  var _journey=useState(null);var activeJourney=_journey[0];var setActiveJourney=_journey[1];
+
+  /* Values flow state */
+  var _vStep=useState(0);var vStep=_vStep[0];var setVStep=_vStep[1];
+  var _vSelected=useState(store.valuesState?store.valuesState.selected:[]);var vSelected=_vSelected[0];var setVSelected=_vSelected[1];
+  var _vTop=useState(store.valuesState?store.valuesState.top:[]);var vTop=_vTop[0];var setVTop=_vTop[1];
+
+  /* Wheel history */
+  var snapshots=store.wheelSnapshots||[];
+
+  /* === VALUES FLOW === */
+  if(activeJourney==='values'){
+    function toggleValue(id){
+      vSelected.indexOf(id)>=0?setVSelected(vSelected.filter(function(x){return x!==id})):setVSelected(vSelected.concat(id));
+    }
+    function toggleTop(id){
+      vTop.indexOf(id)>=0?setVTop(vTop.filter(function(x){return x!==id})):
+      vTop.length<7?setVTop(vTop.concat(id)):null;
+    }
+    function saveValues(){
+      setStore(function(s){s.valuesState={selected:vSelected,top:vTop,experiments:s.valuesState?s.valuesState.experiments:[]};return s});
+      setActiveJourney(null);setVStep(0);
+    }
+
+    if(vStep===0){
+      /* Step 1: Card sort - select all that resonate */
+      return h('div',{className:'fi'},
+        h('div',{className:'card-hdr'},
+          h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\u2728 Values Discovery'),
+          h('button',{className:'btn-s',onClick:function(){setActiveJourney(null)}},'\u2190')
+        ),
+        h('div',{className:'pdots'},
+          [0,1,2].map(function(i){return h('div',{key:i,style:{background:i<=vStep?'var(--amber)':'rgba(255,255,255,0.06)'}})})
+        ),
+        h('div',{style:{fontSize:'0.64rem',color:'var(--text-sec)',marginBottom:8,textAlign:'center'}},'Tap all values that resonate with you right now'),
+        h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',textAlign:'center',marginBottom:12}},vSelected.length+' selected'),
+        h('div',{className:'g2'},VALUES_CARDS.map(function(v){
+          var on=vSelected.indexOf(v.id)>=0;
+          return h('div',{key:v.id,className:'vcard'+(on?' on':''),onClick:function(){toggleValue(v.id)}},
+            h('div',{className:'vlbl'},v.label),
+            h('div',{className:'vdesc'},v.desc)
+          );
+        })),
+        vSelected.length>=3&&h('button',{className:'btn',style:{marginTop:12},onClick:function(){setVStep(1)}},'Next: Narrow to top values \u2192')
+      );
+    }
+
+    if(vStep===1){
+      /* Step 2: Narrow to top 5-7 */
+      return h('div',{className:'fi'},
+        h('div',{className:'card-hdr'},
+          h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\u2728 Your Top Values'),
+          h('button',{className:'btn-s',onClick:function(){setVStep(0)}},'\u2190')
+        ),
+        h('div',{className:'pdots'},
+          [0,1,2].map(function(i){return h('div',{key:i,style:{background:i<=vStep?'var(--amber)':'rgba(255,255,255,0.06)'}})})
+        ),
+        h('div',{style:{fontSize:'0.64rem',color:'var(--text-sec)',marginBottom:8,textAlign:'center'}},'Pick your top 5-7 from the ones that resonated'),
+        h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',textAlign:'center',marginBottom:12}},vTop.length+'/7 chosen'),
+        h('div',{className:'g2'},vSelected.map(function(vid){
+          var v=VALUES_CARDS.find(function(c){return c.id===vid});if(!v)return null;
+          var on=vTop.indexOf(v.id)>=0;
+          return h('div',{key:v.id,className:'vcard'+(on?' on':''),onClick:function(){toggleTop(v.id)}},
+            h('div',{className:'vlbl'},v.label),
+            h('div',{className:'vdesc'},v.desc)
+          );
+        })),
+        vTop.length>=3&&h('button',{className:'btn',style:{marginTop:12},onClick:function(){setVStep(2)}},'Next: Commit \u2192')
+      );
+    }
+
+    if(vStep===2){
+      /* Step 3: Commit & save */
+      return h('div',{className:'fi'},
+        h('div',{className:'card-hdr'},
+          h('h2',{style:{fontFamily:'var(--fh)',fontSize:'1rem'}},'\u2728 Your Core Values'),
+          h('button',{className:'btn-s',onClick:function(){setVStep(1)}},'\u2190')
+        ),
+        h('div',{className:'pdots'},
+          [0,1,2].map(function(i){return h('div',{key:i,style:{background:i<=vStep?'var(--amber)':'rgba(255,255,255,0.06)'}})})
+        ),
+        h('div',{style:{textAlign:'center',marginBottom:16}},
+          h('div',{style:{fontSize:'0.68rem',color:'var(--text-sec)',marginBottom:8}},'These are your core values right now'),
+          h('div',{style:{display:'flex',flexWrap:'wrap',gap:6,justifyContent:'center'}},vTop.map(function(vid){
+            var v=VALUES_CARDS.find(function(c){return c.id===vid});if(!v)return null;
+            return h('span',{key:vid,style:{fontSize:'0.64rem',fontWeight:700,padding:'6px 14px',borderRadius:16,background:'var(--amber-dim)',color:'var(--amber)',border:'1px solid rgba(251,191,36,0.2)'}},v.label);
+          }))
+        ),
+        h('div',{className:'card',style:{textAlign:'center'}},
+          h('div',{style:{fontSize:'0.58rem',color:'var(--text-muted)',marginBottom:4}},'Values can change. You can redo this anytime.'),
+          h('button',{className:'btn',onClick:saveValues},'Save My Values \u2713')
+        )
+      );
+    }
+  }
+
+  /* === EXPLORE HOME === */
+  return h('div',{className:'fi'},
+    h('div',{className:'card-hdr'},
+      h('h1',{style:{fontFamily:'var(--fh)',fontSize:'1.15rem'}},'Discover')
+    ),
+    /* Sub-tabs */
+    h('div',{style:{display:'flex',gap:4,marginBottom:12}},
+      ['explore','wheel','journey'].map(function(v){
+        var labels={explore:'Explore',wheel:'Life Wheel',journey:'My Journey'};
+        return h('button',{key:v,className:'pill'+(view===v?' on':''),onClick:function(){setView(v)}},labels[v]);
+      })
+    ),
+
+    /* EXPLORE VIEW */
+    view==='explore'&&h('div',null,
+      /* Current values */
+      (store.valuesState&&store.valuesState.top&&store.valuesState.top.length>0)&&h('div',{className:'card'},
+        h('div',{className:'card-t'},'\u2728 My Values'),
+        h('div',{style:{display:'flex',flexWrap:'wrap',gap:4}},store.valuesState.top.map(function(vid){
+          var v=VALUES_CARDS.find(function(c){return c.id===vid});if(!v)return null;
+          return h('span',{key:vid,className:'pill on'},v.label);
+        })),
+        h('button',{className:'btn-s',style:{marginTop:8},onClick:function(){setActiveJourney('values');setVStep(0)}},'Redo values')
+      ),
+      /* Journeys */
+      h('div',{className:'slbl'},'Self-Discovery Journeys'),
+      JOURNEYS.map(function(j){
+        return h('div',{key:j.id,className:'card',style:{cursor:'pointer',display:'flex',alignItems:'center',gap:10},
+          onClick:function(){
+            if(j.type==='values'){setActiveJourney('values');setVStep(0)}
+          }},
+          h('div',{style:{fontSize:'1.2rem'}},j.icon),
+          h('div',{style:{flex:1}},
+            h('div',{style:{fontSize:'0.68rem',fontWeight:700}},j.title),
+            h('div',{style:{display:'flex',gap:4,marginTop:3}},j.pillars.map(function(pid){
+              return h(PillarBadge,{key:pid,id:pid});
+            }))
+          ),
+          h('span',{style:{fontSize:'0.54rem',color:'var(--teal)'}},j.type==='values'?'Start \u2192':'Coming soon')
+        );
+      })
+    ),
+
+    /* WHEEL VIEW */
+    view==='wheel'&&h('div',null,
+      h(LifeWheelCheckin,{store:store,setStore:setStore}),
+      /* History */
+      snapshots.length>0&&h('div',null,
+        h('div',{className:'slbl',style:{marginTop:12}},'Wheel History ('+snapshots.length+' snapshots)'),
+        snapshots.slice(0,10).map(function(snap,idx){
+          var prevSnap=snapshots[idx+1];
+          var avgScore=avg(PILLARS.map(function(pl){return snap.ratings[pl.id]||5}));
+          var prevAvg=prevSnap?avg(PILLARS.map(function(pl){return prevSnap.ratings[pl.id]||5})):null;
+          var delta=prevAvg!==null?Math.round((avgScore-prevAvg)*10)/10:null;
+          var lowest=null;var lowestVal=11;
+          PILLARS.forEach(function(pl){if((snap.ratings[pl.id]||5)<lowestVal){lowestVal=snap.ratings[pl.id]||5;lowest=pl}});
+
+          return h('div',{key:snap.id,className:'card',style:{padding:'10px 14px'}},
+            h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}},
+              h('span',{style:{fontSize:'0.56rem',fontWeight:600,color:'var(--text-sec)'}},relDay(snap.createdAt?snap.createdAt.slice(0,10):'')),
+              h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+                h('span',{style:{fontSize:'0.72rem',fontWeight:700}},avgScore),
+                delta!==null&&h('span',{style:{fontSize:'0.50rem',fontWeight:700,color:delta>0?'var(--green)':delta<0?'var(--red)':'var(--text-muted)'}},delta>0?'+'+delta:delta)
+              )
+            ),
+            /* Mini pillar bars */
+            h('div',{style:{display:'flex',gap:3}},PILLARS.map(function(pl){
+              var v=snap.ratings[pl.id]||5;
+              return h('div',{key:pl.id,style:{flex:1,textAlign:'center'}},
+                h('div',{style:{height:30,display:'flex',alignItems:'flex-end',justifyContent:'center'}},
+                  h('div',{style:{width:'100%',height:v*10+'%',background:pl.color,borderRadius:2,minHeight:2,opacity:0.7}})
+                ),
+                h('div',{style:{fontSize:'0.38rem',color:'var(--text-muted)',marginTop:2}},pl.icon)
+              );
+            })),
+            lowest&&h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',marginTop:4}},'Needs attention: ',h('span',{style:{color:lowest.color}},lowest.icon,' ',lowest.label)),
+            snap.notes&&h('div',{style:{fontSize:'0.52rem',color:'var(--text-sec)',marginTop:4,fontStyle:'italic'}},snap.notes)
+          );
+        })
+      )
+    ),
+
+    /* JOURNEY VIEW */
+    view==='journey'&&h('div',null,
+      h('div',{style:{textAlign:'center',padding:'24px 0',color:'var(--text-muted)'}},
+        h('div',{style:{fontSize:'1.2rem',marginBottom:6}},'\uD83D\uDCDD'),
+        h('div',{style:{fontSize:'0.68rem'}},'Journey milestones coming in next update'),
+        h('div',{style:{fontSize:'0.52rem',marginTop:4}},'For now, use Explore to discover your values')
+      )
+    )
+  );
+}
+
+/* ===== PATTERNS TAB ===== */
+function PatternsTab(p){
+  var store=p.store;var setStore=p.setStore;
+
+  /* Gather data */
+  var checkIns=store.checkIns||[];
+  var todayKey=today();
+
+  /* Last 7 days of data */
+  var last7days=[];
+  for(var i=0;i<7;i++){
+    var d=new Date();d.setDate(d.getDate()-i);
+    var dk=d.toISOString().slice(0,10);
+    var dayCIs=checkIns.filter(function(c){return c.createdAt&&c.createdAt.slice(0,10)===dk});
+    last7days.push({date:dk,label:d.toLocaleDateString('en-US',{weekday:'short'}),checkIns:dayCIs,isToday:dk===todayKey});
+  }
+  last7days.reverse();
+
+  /* Week stats */
+  var weekMoods=[];var weekEnergy=[];var weekStates={};var weekHelped={};var weekDrained={};
+  last7days.forEach(function(d){
+    d.checkIns.forEach(function(ci){
+      if(ci.mood)weekMoods.push(ci.mood);
+      if(ci.energy)weekEnergy.push(ci.energy);
+      if(ci.nsState){weekStates[ci.nsState]=(weekStates[ci.nsState]||0)+1}
+      if(ci.helped)(ci.helped||[]).forEach(function(h){weekHelped[h]=(weekHelped[h]||0)+1});
+      if(ci.drained)(ci.drained||[]).forEach(function(d){weekDrained[d]=(weekDrained[d]||0)+1});
+    });
+  });
+
+  var avgMood=weekMoods.length?avg(weekMoods):null;
+  var avgEnergy=weekEnergy.length?avg(weekEnergy):null;
+  var topState=Object.keys(weekStates).sort(function(a,b){return weekStates[b]-weekStates[a]})[0];
+  var topHelped=Object.keys(weekHelped).sort(function(a,b){return weekHelped[b]-weekHelped[a]}).slice(0,2);
+  var topDrained=Object.keys(weekDrained).sort(function(a,b){return weekDrained[b]-weekDrained[a]}).slice(0,2);
+
+  /* Check-in count */
+  var ciCount=last7days.reduce(function(s,d){return s+d.checkIns.length},0);
+
+  /* Wheel trends */
+  var snapshots=store.wheelSnapshots||[];
+  var latestSnap=snapshots[0];
+  var prevSnap=snapshots[1];
+
+  /* Build insights */
+  var insights2=[];
+  if(topDrained.length>0)insights2.push({icon:'\uD83D\uDD0B',text:'Top drainers this week: '+topDrained.join(', ')});
+  if(topHelped.length>0)insights2.push({icon:'\u2705',text:'What helped most: '+topHelped.join(', ')});
+  if(topState){var ts=nsState(topState);insights2.push({icon:ts.icon,text:'Most frequent state: '+ts.label})}
+  if(latestSnap&&prevSnap){
+    var improved=null;var dropped=null;var bestDelta=-99;var worstDelta=99;
+    PILLARS.forEach(function(pl){
+      var cur=latestSnap.ratings[pl.id]||5;var prev2=prevSnap.ratings[pl.id]||5;
+      var d=cur-prev2;
+      if(d>bestDelta){bestDelta=d;improved=pl}
+      if(d<worstDelta){worstDelta=d;dropped=pl}
+    });
+    if(bestDelta>0&&improved)insights2.push({icon:'\uD83D\uDCC8',text:improved.label+' improved by '+bestDelta+' since last wheel'});
+    if(worstDelta<0&&dropped)insights2.push({icon:'\uD83D\uDCC9',text:dropped.label+' dropped by '+Math.abs(worstDelta)+' since last wheel'});
+  }
+
+  /* Regulation sessions */
+  var regSessions=store.regulationSessions||[];
+  var weekRegs=regSessions.filter(function(s){
+    if(!s.createdAt)return false;
+    var d=new Date(s.createdAt);var diff=(new Date()-d)/(1000*60*60*24);
+    return diff>=0&&diff<7;
+  });
+
+  return h('div',{className:'fi'},
+    h('div',{className:'card-hdr'},
+      h('h1',{style:{fontFamily:'var(--fh)',fontSize:'1.15rem'}},'Patterns')
+    ),
+
+    /* Week summary card */
+    h('div',{className:'card',style:{borderLeft:'3px solid var(--amber)'}},
+      h('div',{style:{fontSize:'0.48rem',fontWeight:700,color:'var(--amber)',textTransform:'uppercase',letterSpacing:'1px',marginBottom:8}},'This Week'),
+      h('div',{style:{display:'flex',gap:12,marginBottom:8}},
+        h('div',{style:{textAlign:'center'}},
+          h('div',{style:{fontSize:'1.1rem',fontWeight:800,color:avgMood>=4?'var(--green)':avgMood>=3?'var(--amber)':'var(--red)'}},avgMood||'--'),
+          h('div',{style:{fontSize:'0.44rem',color:'var(--text-muted)'}},'avg mood')
+        ),
+        h('div',{style:{textAlign:'center'}},
+          h('div',{style:{fontSize:'1.1rem',fontWeight:800}},avgEnergy||'--'),
+          h('div',{style:{fontSize:'0.44rem',color:'var(--text-muted)'}},'avg energy')
+        ),
+        h('div',{style:{textAlign:'center'}},
+          h('div',{style:{fontSize:'1.1rem',fontWeight:800}},ciCount),
+          h('div',{style:{fontSize:'0.44rem',color:'var(--text-muted)'}},'check-ins')
+        ),
+        h('div',{style:{textAlign:'center'}},
+          h('div',{style:{fontSize:'1.1rem',fontWeight:800}},weekRegs.length),
+          h('div',{style:{fontSize:'0.44rem',color:'var(--text-muted)'}},'reg sessions')
+        )
+      )
+    ),
+
+    /* Insights */
+    insights2.length>0&&h('div',{style:{marginBottom:10}},insights2.map(function(ins,i){
+      return h('div',{key:i,className:'ins fi'},
+        h('span',{className:'iico'},ins.icon),
+        h('span',{className:'itxt'},ins.text)
+      );
+    })),
+
+    /* Mood heatmap */
+    h('div',{className:'card'},
+      h('div',{className:'card-t'},'Mood This Week'),
+      h('div',{className:'hm-row'},last7days.map(function(d){
+        var lastCI=d.checkIns.length?d.checkIns[d.checkIns.length-1]:null;
+        var m=lastCI?lastCI.mood:null;
+        var bg=m?m>=4?'var(--green)':m>=3?'var(--amber)':'var(--red)':'rgba(255,255,255,0.03)';
+        return h('div',{key:d.date,style:{textAlign:'center'}},
+          h('div',{className:'hm-lbl'},d.label),
+          h('div',{className:'hm-cell',style:{background:bg,color:m?'var(--bg)':'var(--text-muted)',border:d.isToday?'2px solid var(--amber)':'1px solid var(--border)'}},
+            m?MOODS.find(function(mo){return mo.v===m}).e:'\u00B7')
+        );
+      }))
+    ),
+
+    /* NS State heatmap */
+    h('div',{className:'card'},
+      h('div',{className:'card-t'},'Nervous System'),
+      h('div',{className:'hm-row'},last7days.map(function(d){
+        var lastCI=d.checkIns.length?d.checkIns[d.checkIns.length-1]:null;
+        var nsId=lastCI?lastCI.nsState:null;
+        var st=nsId?nsState(nsId):null;
+        return h('div',{key:d.date+'ns',style:{textAlign:'center'}},
+          h('div',{className:'hm-lbl'},d.label),
+          h('div',{className:'hm-cell',style:{background:st?st.dim:'rgba(255,255,255,0.03)',border:d.isToday?'2px solid var(--amber)':'1px solid var(--border)'}},
+            st?st.icon:'\u00B7')
+        );
+      }))
+    ),
+
+    /* Wheel trends (if snapshots exist) */
+    snapshots.length>0&&h('div',{className:'card'},
+      h('div',{className:'card-t'},'\uD83C\uDFAF Life Wheel Trends'),
+      h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)',marginBottom:8}},snapshots.length+' snapshot'+(snapshots.length>1?'s':'')),
+      PILLARS.map(function(pl){
+        var history=snapshots.slice(0,6).map(function(s){return s.ratings[pl.id]||5}).reverse();
+        var current=history[history.length-1];
+        return h('div',{key:pl.id,style:{display:'flex',alignItems:'center',gap:6,padding:'3px 0'}},
+          h('span',{style:{fontSize:'0.7rem',width:18}},pl.icon),
+          h('span',{style:{fontSize:'0.54rem',color:'var(--text-sec)',width:90}},pl.label),
+          h('div',{style:{flex:1}},h(Sparkline,{data:history,color:pl.color,width:60,height:16})),
+          h('span',{style:{fontSize:'0.60rem',fontWeight:700,color:pl.color,width:16,textAlign:'right'}},current)
+        );
+      })
+    ),
+
+    /* Mood trend sparkline */
+    checkIns.filter(function(c){return c.mood}).length>3&&h('div',{className:'card'},
+      h('div',{className:'card-t'},'Mood Trend (last 14)'),
+      h('div',{style:{display:'flex',justifyContent:'center'}},
+        h(Sparkline,{data:checkIns.filter(function(c){return c.mood}).slice(-14).map(function(c){return c.mood}),color:'var(--teal)',width:280,height:40})
+      )
+    )
+  );
+}
+
+/* ===== TASKS TAB ===== */
+function TasksTab(p){
+  var store=p.store;var setStore=p.setStore;
+  var _view=useState('today');var view=_view[0];var setView=_view[1];
+  var _newTask=useState('');var newTask=_newTask[0];var setNewTask=_newTask[1];
+  var _energy=useState('medium');var energyFilter=_energy[0];var setEnergyFilter=_energy[1];
+
+  var todayKey=today();
+  var allTasks=store.tasks||[];
+  var todoTasks=allTasks.filter(function(t){return t.status==='todo'});
+  var todayTasks=allTasks.filter(function(t){return t.status==='today'||t.todayDate===todayKey});
+  var waitingTasks=allTasks.filter(function(t){return t.status==='waiting'});
+  var doneTasks=allTasks.filter(function(t){return t.status==='done'}).slice(0,15);
+
+  function addTask(){
+    if(!newTask.trim())return;
+    var t={id:uid(),title:newTask.trim(),pillarIds:[],energyCost:'medium',status:view==='today'?'today':'todo',nextAction:'',meta:'Added '+todayKey,priority:2,doneDate:null,todayDate:view==='today'?todayKey:null};
+    setStore(function(s){s.tasks.push(t);return s});
+    setNewTask('');
+  }
+
+  function toggleDone(id){
+    setStore(function(s){s.tasks=s.tasks.map(function(t){
+      if(t.id!==id)return t;
+      return Object.assign({},t,{status:t.status==='done'?'today':'done',doneDate:t.status==='done'?null:todayKey});
+    });return s});
+  }
+  function removeTask(id){setStore(function(s){s.tasks=s.tasks.filter(function(t){return t.id!==id});return s})}
+  function moveToToday(id){setStore(function(s){s.tasks=s.tasks.map(function(t){return t.id===id?Object.assign({},t,{status:'today',todayDate:todayKey}):t});return s})}
+  function setEnergyCost(id,cost){setStore(function(s){s.tasks=s.tasks.map(function(t){return t.id===id?Object.assign({},t,{energyCost:cost}):t});return s})}
+
+  /* Energy-filtered today tasks */
+  var filteredToday=todayTasks;
+  if(energyFilter==='survival')filteredToday=todayTasks.filter(function(t){return t.energyCost==='low'||t.status==='done'});
+  else if(energyFilter==='low')filteredToday=todayTasks.filter(function(t){return t.energyCost!=='high'||t.status==='done'});
+
+  var visTasks=view==='today'?filteredToday:view==='backlog'?todoTasks:view==='waiting'?waitingTasks:doneTasks;
+
+  return h('div',{className:'fi'},
+    h('div',{className:'card-hdr'},
+      h('h1',{style:{fontFamily:'var(--fh)',fontSize:'1.15rem'}},'Tasks')
+    ),
+
+    /* Energy selector */
+    view==='today'&&h('div',{className:'card',style:{padding:'8px 12px'}},
+      h('div',{style:{fontSize:'0.50rem',color:'var(--text-muted)',marginBottom:4}},'Available energy'),
+      h('div',{style:{display:'flex',gap:4}},ENERGY_LEVELS.map(function(el){
+        return h('button',{key:el.id,className:'pill'+(energyFilter===el.id?' on':''),
+          style:energyFilter===el.id?{background:el.color+'20',borderColor:el.color,color:el.color}:{},
+          onClick:function(){setEnergyFilter(el.id)}},el.icon,' ',el.label);
+      }))
+    ),
+
+    /* View tabs */
+    h('div',{style:{display:'flex',gap:4,marginBottom:10}},
+      [{id:'today',l:'Today ('+todayTasks.length+')'},{id:'backlog',l:'Later ('+todoTasks.length+')'},{id:'waiting',l:'Waiting ('+waitingTasks.length+')'},{id:'done',l:'Done'}].map(function(v){
+        return h('button',{key:v.id,className:'pill'+(view===v.id?' on':''),onClick:function(){setView(v.id)}},v.l);
+      })
+    ),
+
+    /* Survival mode message */
+    energyFilter==='survival'&&view==='today'&&h('div',{className:'ins'},
+      h('span',{className:'iico'},'\uD83D\uDECF\uFE0F'),
+      h('span',{className:'itxt'},'Survival mode: only showing low-energy tasks. You\'re doing enough.')
+    ),
+
+    /* Task list */
+    h('div',{className:'card'},
+      visTasks.length===0?h('div',{style:{textAlign:'center',padding:'16px 0'}},
+        h('div',{style:{fontSize:'0.68rem',color:'var(--text-muted)'}},
+          view==='today'?'Pick tasks from your backlog, or add one below':
+          view==='done'?'Nothing completed yet':'All clear!')
+      ):
+      visTasks.sort(function(a,b){return(a.status==='done'?1:0)-(b.status==='done'?1:0)||(a.priority||2)-(b.priority||2)}).map(function(t){
+        return h('div',{key:t.id,className:'tsk'},
+          h('div',{className:'tsk-chk'+(t.status==='done'?' done':''),onClick:function(){toggleDone(t.id)}},t.status==='done'?'\u2713':''),
+          h('div',{style:{flex:1,minWidth:0}},
+            h('div',{className:'tsk-title'+(t.status==='done'?' done':'')},t.title),
+            h('div',{style:{display:'flex',gap:4,alignItems:'center',marginTop:2,flexWrap:'wrap'}},
+              t.meta&&h('span',{className:'tsk-meta'},t.meta),
+              t.energyCost&&h('span',{className:'ebadge '+t.energyCost},t.energyCost),
+              view==='backlog'&&h('button',{className:'btn-s',style:{fontSize:'0.44rem',padding:'2px 6px'},onClick:function(e){e.stopPropagation();moveToToday(t.id)}},'+Today')
+            )
+          ),
+          h('button',{style:{background:'none',border:'none',color:'var(--text-muted)',cursor:'pointer',fontSize:'0.52rem',opacity:0.4,padding:'2px 4px',flexShrink:0},
+            onClick:function(){removeTask(t.id)}},'\u2715')
+        );
+      }),
+      /* Quick add */
+      view!=='done'&&h('div',{style:{display:'flex',gap:6,marginTop:8}},
+        h('input',{type:'text',placeholder:'+ Quick add...',value:newTask,style:{fontSize:'0.64rem'},
+          onChange:function(e){setNewTask(e.target.value)},
+          onKeyDown:function(e){if(e.key==='Enter')addTask()}}),
+        newTask.trim()&&h('button',{style:{background:'var(--teal)',color:'#0f1117',border:'none',borderRadius:'var(--rs)',padding:'6px 12px',fontSize:'0.64rem',fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'},onClick:addTask},'Add')
+      )
+    )
+  );
+}
+
+/* ===== CRISIS OVERLAY ===== */
+function CrisisOverlay(p){
+  var plan=p.plan||DEFAULT_SAFETY;
+  var _step=useState(0);var step=_step[0];var setStep=_step[1];
+  var sections=[
+    {title:'Warning Signs',content:function(){
+      return h('div',null,(plan.warnings||[]).map(function(w,i){return h('div',{key:i,style:{padding:'6px 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.64rem'}},'\u26A0\uFE0F ',w)}));
+    }},
+    {title:'Coping Strategies',content:function(){
+      return h('div',null,(plan.internalCoping||[]).map(function(c,i){return h('div',{key:i,className:'card',style:{marginBottom:6,padding:'10px 12px'}},h('div',{style:{fontSize:'0.66rem',fontWeight:600}},c))}));
+    }},
+    {title:'People to Contact',content:function(){
+      return h('div',null,(plan.people||[]).map(function(per,i){
+        return h('div',{key:i,className:'card',style:{marginBottom:6,display:'flex',justifyContent:'space-between',alignItems:'center'}},
+          h('div',null,
+            h('div',{style:{fontSize:'0.68rem',fontWeight:700}},per.name),
+            h('div',{style:{fontSize:'0.52rem',color:'var(--text-muted)'}},per.role)
+          ),
+          per.phone&&h('a',{href:'tel:'+per.phone,style:{background:'var(--green)',color:'#0f1117',padding:'6px 12px',borderRadius:'var(--rs)',fontWeight:700,fontSize:'0.60rem',textDecoration:'none'}},'\uD83D\uDCDE Call')
+        );
+      }));
+    }},
+    {title:'Reasons to Stay',content:function(){
+      return h('div',null,(plan.reasons||[]).map(function(r,i){return h('div',{key:i,style:{padding:'8px 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.68rem',lineHeight:1.5}},'\u2764\uFE0F ',r)}));
+    }},
+    {title:'Message Templates',content:function(){
+      return h('div',null,(plan.scripts||[]).map(function(s,i){
+        return h('div',{key:i,className:'card',style:{marginBottom:6}},
+          h('div',{style:{fontSize:'0.56rem',fontWeight:700,color:'var(--teal)',marginBottom:4}},s.label),
+          h('div',{style:{fontSize:'0.64rem',lineHeight:1.5,padding:'8px',background:'rgba(255,255,255,0.02)',borderRadius:'var(--rs)'}},s.text)
+        );
+      }));
+    }}
+  ];
+
+  return h('div',{style:{position:'fixed',inset:0,background:'var(--bg)',zIndex:100,overflow:'auto',padding:'16px',paddingTop:'calc(env(safe-area-inset-top,16px) + 12px)',paddingBottom:'calc(env(safe-area-inset-bottom,16px) + 12px)'}},
+    h('div',{style:{maxWidth:520,margin:'0 auto'}},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}},
+        h('h1',{style:{fontFamily:'var(--fh)',fontSize:'1.2rem',color:'var(--red)'}},'\uD83D\uDEA8 Safety Plan'),
+        h('button',{className:'btn-s',onClick:p.onClose},'Close \u2715')
+      ),
+      h('div',{style:{textAlign:'center',padding:'12px',background:'var(--red-dim)',borderRadius:'var(--r)',marginBottom:16}},
+        h('div',{style:{fontSize:'0.72rem',fontWeight:700,color:'var(--red)'}},'You are not alone. This will pass.'),
+        h('div',{style:{fontSize:'0.58rem',color:'var(--text-sec)',marginTop:4}},'Work through these steps at your own pace.')
+      ),
+      /* Step tabs */
+      h('div',{style:{display:'flex',gap:3,marginBottom:12,overflowX:'auto'}},sections.map(function(s,i){
+        return h('button',{key:i,className:'pill'+(step===i?' on':''),
+          style:step===i?{background:'var(--red-dim)',borderColor:'var(--red)',color:'var(--red)'}:{},
+          onClick:function(){setStep(i)}},s.title);
+      })),
+      h('div',{className:'fi'},sections[step].content())
+    )
+  );
+}
+
+/* ===== SETTINGS VIEW ===== */
+function SettingsView(p){
+  var store=p.store;var setStore=p.setStore;
+  var dataSize=useMemo(function(){try{var s=window.localStorage.getItem(STORE_KEY);return s?Math.round(s.length/1024):0}catch(e){return 0}},[store]);
+
+  function exportData(){
+    var blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);var a=document.createElement('a');
+    a.href=url;a.download='life-os-backup-'+today()+'.json';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  }
+  function importData(){
+    var input=document.createElement('input');input.type='file';input.accept='.json';
+    input.onchange=function(e){var file=e.target.files[0];if(!file)return;
+      var reader=new FileReader();reader.onload=function(ev){
+        try{var d=JSON.parse(ev.target.result);
+          if(d._v===4||d.checkIns||d.tasks){setStore(d);p.onClose();alert('Data restored!')}
+          else{alert('Invalid backup file.')}
+        }catch(err){alert('Could not read file: '+err.message)}
+      };reader.readAsText(file)};
+    input.click();
+  }
+
+  return h('div',{style:{position:'fixed',inset:0,background:'var(--bg)',zIndex:100,overflow:'auto'}},
+    h('div',{className:'top-bar'},h('h1',null,'Settings'),h('button',{className:'btn-s',onClick:p.onClose},'\u2715 Close')),
+    h('div',{className:'main'},
+      h('div',{className:'card'},
+        h('div',{className:'card-t'},'\uD83D\uDCBE Data Backup'),
+        h('div',{style:{fontSize:'0.62rem',color:'var(--text-sec)',marginBottom:12,lineHeight:1.5}},
+          'Your data lives in this browser\'s storage (',dataSize,'KB). Export regularly.'
+        ),
+        h('div',{style:{display:'flex',gap:8}},
+          h('button',{className:'btn',style:{flex:1},onClick:exportData},'\u2B07\uFE0F Export'),
+          h('button',{className:'btn',style:{flex:1,background:'var(--purple)'},onClick:importData},'\u2B06\uFE0F Import')
+        )
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-t'},'\uD83D\uDCF1 Install as App'),
+        h('div',{style:{fontSize:'0.62rem',color:'var(--text-sec)',lineHeight:1.5}},
+          'For best experience, add to your home screen. Tap Share then "Add to Home Screen".')
+      ),
+      h('div',{className:'card'},
+        h('div',{className:'card-t'},'\u2139\uFE0F About'),
+        h('div',{style:{fontSize:'0.58rem',color:'var(--text-muted)',lineHeight:1.6}},
+          'Life OS v4.0',h('br'),
+          'All data stored locally. No accounts. No tracking.',h('br'),
+          'Built for ADHD + BPD self-management.',h('br'),h('br'),
+          'Dr. Cory Dugan')
+      )
+    )
+  );
+}
+
+/* ===== RENDER ===== */
+ReactDOM.createRoot(document.getElementById('root')).render(h(App,null));
+
+/* Service worker */
+if('serviceWorker' in navigator){
+  var sw='self.addEventListener("install",function(e){self.skipWaiting()});self.addEventListener("activate",function(e){e.waitUntil(clients.claim())});self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})';
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(function(){});
+}
 </script>
 </body>
 </html>
